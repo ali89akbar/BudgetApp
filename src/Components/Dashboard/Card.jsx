@@ -10,7 +10,7 @@ const Cards = ({total, Income,expense, showExpenseModal,showIncomeModal}) => {
       <Card bordered={true} className="my-card">
         <h2>Current Balance</h2>
         <p>{total}</p>
-        <Button type='primary' class="btn " style={{ margin: 0 }} >
+        <Button type='primary' className="btn" style={{ margin: 0 }} >
           Reset Balance
         </Button>
       </Card>

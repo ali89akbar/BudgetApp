@@ -2,6 +2,7 @@ import { Table,Select } from 'antd'
 import React, { useState } from 'react'
 
 const Tables = ({transactions}) => {
+    let {Option}= Select;
     const [search,setSearch]=useState("");
     const [typeFilter,setTypefilter] = useState("")
     const column=[{
@@ -39,6 +40,7 @@ const Tables = ({transactions}) => {
     <Select
     className="select-input"
     onChange={(value)=> setTypefilter(value)}
+    value={typeFilter}
     placeholder ="Filter"
     allowClear
     >
