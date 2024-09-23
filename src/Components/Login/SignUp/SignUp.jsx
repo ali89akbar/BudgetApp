@@ -1,10 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
+import SignInForm from "./SignIn";
+
 function SignUpForm() {
   const [state, setState] = React.useState({
     name: "",
     email: "",
     password: ""
   });
+  const [showSignInForm, setShowSignInForm] = useState(false);
+
+  const handleClick = () => {
+    setShowSignInForm(true); // Change the state when the button is clicked
+  };
   const handleChange = evt => {
     const value = evt.target.value;
     setState({
@@ -82,7 +89,31 @@ function SignUpForm() {
           placeholder="Password"
         />
         <button>Sign Up</button>
+        <div className="account-text"
+        >  
+         <button
+                  className="ghos"
+                  id="signIn"
+                 onClick={handleClick}
+                >Sign In</button>
+                {showSignInForm && <SignInForm />} {/* Conditionally render the form */}
+                </div>
+                <div className="separator">
+          <hr className="line" />
+          <span className="or-text">OR</span>
+          <hr className="line" />
+        </div>
+
+        {/* Google Sign-In Button */}
+        <div class="google-signin">
+  <div class="google-btn">
+    <i class="fa fa-google"></i>
+    <span class="google-text">Sign in with Google</span>
+  </div>
+</div>
       </form>
+ 
+
     </div>
   );
 }

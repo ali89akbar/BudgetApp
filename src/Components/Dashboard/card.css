@@ -1,0 +1,104 @@
+.my-card{
+    box-shadow: var(--shadow);
+    margin: 1rem;
+   border-radius: 0.5rem;
+   min-width: 400px;
+   flex: 1;
+    font-family: 'Montserrat','sans-serif' !important ;
+}
+.ant-card-head-title{
+margin:0rem !important;
+font-weight: 500;
+
+
+}
+.my-row{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 2rem auto;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 16px;
+
+}
+
+/* Ensure full width */
+.full-width-input {
+    width: 100%;
+    
+  }
+  
+  /* Align the form content to the left */
+  .full-width-form {
+    text-align: left;
+  }
+  
+  /* Custom input field styling for base border on hover */
+  .custom-input {
+    border: none;
+    border-bottom: 2px solid #d9d9d9; /* Default bottom border */
+    transition: border-color 0.3s;
+    padding: 10px;
+    width: 50vh;
+    margin-bottom: 10px;
+  }
+  
+  .custom-input:hover {
+    border-bottom-color: #40a9ff; /* Blue bottom border on hover */
+  }
+  
+  /* Remove default outline and box-shadow when focused */
+  .custom-input:focus {
+    outline: none;
+    box-shadow: none;
+    border-bottom-color: #40a9ff;
+  }
+  .tag{
+    margin-right: 5px;
+    width: 50vh;
+    height: 10vh;
+  }
+  /* Custom select input styles */
+  .select-input-2 {
+    width: 100%;
+  }
+  
+  /* Custom button */
+  .btn {
+    width: 100%;
+    background-color: #1890ff;
+    color: white;
+    border: none;
+    height: 6vh;
+  }
+  
+  .btn:hover {
+    background-color: #40a9ff;
+  }
+  
+  @media (max-width: 768px) {
+
+    .custom-input {
+      border: none;
+      border-bottom: 2px solid #d9d9d9; /* Default bottom border */
+      transition: border-color 0.3s;
+      padding: 10px;
+      width: auto;
+      margin-bottom: 10px;
+    }
+    
+    .custom-input:hover {
+      border-bottom-color: #40a9ff; /* Blue bottom border on hover */
+    }
+    
+    /* Remove default outline and box-shadow when focused */
+    .custom-input:focus {
+      outline: none;
+      box-shadow: none;
+      border-bottom-color: #40a9ff;
+    }
+    .tag{
+      width: auto;
+    }
+  }
