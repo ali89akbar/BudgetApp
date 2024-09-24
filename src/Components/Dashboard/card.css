@@ -1,27 +1,73 @@
-.my-card{
-    box-shadow: var(--shadow);
+.content {
+  width: calc(100% - 50px); /* Adjust the width based on sidebar state */
+  padding: 20px;
+  transition: margin-left 0.3s ease; /* Smooth transition */
+}
+
+.collapsed .content {
+  margin-left: 10px; /* Adjust for the collapsed sidebar */
+}
+
+.expanded .content {
+  margin-left: 100px; /* Adjust for the expanded sidebar */
+}
+
+
+
+
+
+
+.my-row {
+  display: flex;
+  justify-content: space-between; /* Space between cards */
+  align-items: flex-start;
+  margin-top: 3rem;
+  width: 100%;
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+  gap: 5px; /* Space between the cards */
+  box-sizing: border-box;
+}
+
+.my-card {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19);
+  margin: 0.5rem;
+  border-radius: 0.5rem;
+  flex: 1 1 calc(33.33% - 3rem); /* Cards take up 33.33% of row */
+  box-sizing: border-box;
+  max-width: calc(33.33% - 0rem); /* Ensure the cards don't exceed one-third of the row */
+  font-family: 'Montserrat', 'sans-serif' !important;
+}
+
+
+
+/*.my-card{
+    box-shadow:  0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);;
     margin: 1rem;
-   border-radius: 0.5rem;
-   min-width: 400px;
+    border-radius: 0.5rem;
+   min-width: 300px;
    flex: 1;
     font-family: 'Montserrat','sans-serif' !important ;
 }
 .ant-card-head-title{
 margin:0rem !important;
 font-weight: 500;
-
-
 }
-.my-row{
+*/
+.my-card p{
+  font-size: 1.2rem;
+  color: #100e0e;
+}
+/*.my-row{
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    margin: 2rem auto;
+    margin-top: 5rem;
     width: 100%;
     flex-wrap: wrap;
     gap: 16px;
 
 }
+/*
 
 /* Ensure full width */
 .full-width-input {
@@ -77,8 +123,107 @@ font-weight: 500;
     background-color: #40a9ff;
   }
   
-  @media (max-width: 768px) {
+  .input-flex {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    box-shadow: 0px 0px 30px 8px rgba(227, 227, 227, 0.75);
+    border-radius: 0.5rem;
+    padding: 0rem 0.5rem;
+  }
+  
+  .input-flex input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 0;
+  }
+  
+  .input-flex input:focus {
+    outline: none;
+  }
+  
+  .select-input {
+    width: 30%;
+    margin-right: 10;
+    display: flex;
+    align-items: center;
+    box-shadow: 0px 0px 30px 8px rgba(227, 227, 227, 0.75);
+    border-radius: 0.5rem !important;
+    padding: 0.2rem 0.5rem;
+  }
+  
+  .select-input-2 > div {
+    border-width: 0px !important;
+    border-bottom-width: 1px !important;
+    border-radius: 0 !important;
+    border-color: #000 !important;
+  }
+  
+  .select-input > div {
+    border: 0px solid #fff !important;
+  }
+  
+  .my-table {
+    box-shadow: 0px 0px 30px 8px rgba(227, 227, 227, 0.75);
+    border-radius: 0.5rem !important;
+    padding: 2rem;
+    margin-bottom: 4rem;
+  }
+  
+  .dashboard-container {
+    padding-bottom: 1rem;
+  }
 
+  .btns{
+    width: 400px;
+    background-color: #1890ff;
+    display: inline;
+    text-transform: none; 
+    font-size: 15px;
+    font-family: 'Montserrat','sans-serif' !important ;
+    border-radius: 5px;
+
+  }
+ label{
+    
+    font-weight: 500;
+  }
+  @media (max-width: 768px) {
+    .content {
+      min-width: 100%;
+      margin-left: 10px; /* Adjust the width based on sidebar state */
+      padding: 20px;
+      width: 100%;
+      transition: margin-left 0.3s ease; /* Smooth transition */
+    }
+    .my-table{
+      margin-left: 30px;
+    }
+    .collapsed .content {
+      margin-left: 2%; /* Adjust for the collapsed sidebar */
+    }
+    
+    .expanded .content {
+      margin-left: 200px; /* Adjust for the expanded sidebar */
+    }
+    
+
+    .my-row{
+     margin-left:50px;
+     margin-top: 0px;
+     margin-right: 50px;
+     
+    }
+   .my-card{
+    min-width: 100%
+    /* Adjust the width based on sidebar state */
+   }
+
+  .btns{
+    width: auto;
+  }
     .custom-input {
       border: none;
       border-bottom: 2px solid #d9d9d9; /* Default bottom border */

@@ -392,7 +392,9 @@ a:hover {
 .account-text {
   display: none;
 }
-
+.sign{
+  margin-top:10px
+}
 /* For tablets (screens 1024px and below) */
 @media (max-width: 1024px) {
   .account-text {

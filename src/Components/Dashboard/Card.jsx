@@ -9,31 +9,25 @@ const Cards = ({total, Income,expense, showExpenseModal,showIncomeModal}) => {
     >
       <Card bordered={true} className="my-card">
         <h2>Current Balance</h2>
-        <p>{total}</p>
-        <Button type='primary' className="btn" style={{ margin: 0 }} >
+        <p>${total}</p>
+        {/*<Button type='primary' className="btn" style={{ margin: 0 }} >
           Reset Balance
-        </Button>
+        </Button>*/}
       </Card>
 
       <Card bordered={true} className="my-card">
         <h2>Total Income</h2>
-        <p>{Income}</p>
-        <Button type='primary'
-    className="btn"
-          style={{ margin: 0 }}
-         onClick={showIncomeModal}
-        >
-          Add Income
-        </Button>
+        <p>${Income}</p>
+     
       </Card>
 
       <Card bordered={true} className="my-card">
         <h2>Total Expenses</h2>
-        <p>{expense}</p>
-        <Button type='primary' className="btn" onClick={showExpenseModal}
+        <p>${expense}</p>
+        {/*<Button type='primary' className="btn" onClick={showExpenseModal}
         >
           Add Expense
-        </Button>
+        </Button>*/}
       </Card>
     </Row>
     </div>

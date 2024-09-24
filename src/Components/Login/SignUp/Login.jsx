@@ -66,7 +66,7 @@ export default function Login() {
           <div className="overlay-container">
             <div className="overlay">
               <div className="overlay-panel overlay-left">
-                <h1>Welcome Back!</h1>
+                <h1>Welcome to Budget Tracker App</h1>
                 <p>
                   To keep connected with us please login with your personal info
                 </p>
@@ -80,9 +80,9 @@ export default function Login() {
               </div>
 
               <div className="overlay-panel overlay-right">
-                <h1>Hello, Friend!</h1>
-                <p>Enter your personal details and start your journey with us</p>
-                <button
+                <h1>
+Get Started</h1>
+                <p>Take control of your finances, one step at a time.Enter your personal details and start your journey with Budget Tracker App</p>                <button
                   className="ghost"
                   id="signUp"
                   onClick={() => handleOnClick("signUp")}

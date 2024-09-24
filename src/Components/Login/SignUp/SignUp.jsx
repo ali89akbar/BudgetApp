@@ -1,12 +1,52 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SignInForm from "./SignIn";
 
 function SignUpForm() {
   const [state, setState] = React.useState({
     name: "",
     email: "",
-    password: ""
+    phoneno: "",
+    Address:"",
+    password:""
   });
+  const [user,setUser]= useState({});
+
+  function handlecallbackResponse(response){
+    console.log("Callback response received",response.credential);
+    let userObject = jwtDecode(response.credential);
+    console.log(userObject);
+    setUser(userObject);
+    document.getElementById("google-signin").hidden = true;
+  }
+
+
+  useEffect(()=>{
+    google.accounts.id.initialize({
+      client_id: "181931549693-ajeorkb5hvhacecr2fui08c006pmgvba.apps.googleusercontent.com",
+      callback: handlecallbackResponse
+    })
+    google.accounts.id.renderButton(
+      document.getElementById("google-signin"),
+      {
+       // type: "sign-in",
+       // scope: "https://www.googleapis.com/auth/userinfo.email",
+        //width: 240,
+        //height: 50,
+        //longtitle: true,
+        theme: "outline",
+        size:"large"
+        //onsuccess: handlecallbackResponse
+      }
+    )
+    google.accounts.id.prompt();
+  },[])
+
+
+function handleSignOut(e){
+  setUser({})
+  document.getElementById("google-signin").hidden=false
+
+}
   const [showSignInForm, setShowSignInForm] = useState(false);
 
   const handleClick = () => {
@@ -40,19 +80,8 @@ function SignUpForm() {
     <div className="form-container sign-up-container">
       <form onSubmit={handleOnSubmit}>
         <h1 className="heading">Create Account</h1>
-        <div className="social-container">
-          <a href="#" className="social">
-            <i className="fab fa-facebook-f" />
-          </a>
-          <a href="#" className="social">
-            <i className="fab fa-google-plus-g" />
-          </a>
-          <a href="#" className="social">
-            <i className="fab fa-linkedin-in" />
-          </a>
-        </div>
-        <span>or use your email for registration</span>
-        <input
+        
+       <input
           type="text"
           name="name"
           value={state.name}
@@ -88,7 +117,7 @@ function SignUpForm() {
           onChange={handleChange}
           placeholder="Password"
         />
-        <button>Sign Up</button>
+        <button className="sign">Sign Up</button>
         <div className="account-text"
         >  
          <button
@@ -105,12 +134,20 @@ function SignUpForm() {
         </div>
 
         {/* Google Sign-In Button */}
-        <div class="google-signin">
-  <div class="google-btn">
-    <i class="fa fa-google"></i>
-    <span class="google-text">Sign in with Google</span>
-  </div>
-</div>
+        <div id="google-signin">
+       
+       </div>
+       {
+                   Object.keys(user).length !=0  &&
+                   <button onClick={(e)=> handleSignOut(e)}>Signout</button>
+       
+                 }
+         {user && 
+         <div>
+           {console.log(user.name)}
+           <img src={user.picture} alt="" />
+           <h3>{user.name}</h3>
+           </div>}
       </form>
  
 

@@ -7,7 +7,7 @@ import Login from './Components/Login/SignUp/Login.jsx'
 import SignUpForm from './Components/Login/SignUp/SignUp.jsx'
 import SignInForm from './Components/Login/SignUp/SignIn.jsx'
 import Dashboard from './Components/Dashboard/Dashboard.jsx'
-
+import PieChart from './Components/Dashboard/Chart/PieChart.jsx'
 
 const router= createBrowserRouter(
   createRoutesFromElements(
@@ -15,6 +15,7 @@ const router= createBrowserRouter(
     <Route path="/" element={<Login />} />
     <Route path="/signup" element={<SignInForm />} />
     <Route path='/dashboard' element={<Dashboard/>}/>
+    <Route path='/chart' element={<PieChart/>}/>
     </>
   )
 )

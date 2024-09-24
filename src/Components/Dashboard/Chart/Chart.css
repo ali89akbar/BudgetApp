@@ -1,0 +1,37 @@
+.charts-wrapper {
+    display: flex; /* Use flex to align charts horizontally */
+    height: auto;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0px 0px 30px 8px rgba(227, 227, 227, 0.75);
+    justify-content: space-between;
+    margin: 2rem;
+    width: 96%;
+}
+.chart-container {
+    flex: 1; /* Make each chart take up equal space */
+    margin-right: 1rem; /* Add some space between charts */
+}
+
+.chart-container:last-child {
+    margin-right: 0; /* Remove margin for the last chart */
+}
+
+@media (max-width: 1065px) {
+    .charts-wrapper {
+        flex-direction: column; /* Stack charts vertically */
+        align-items: center; /* Center the charts horizontally */
+        padding: 1rem; /* Adjust padding for smaller screens */
+        width: 100%; 
+        margin-left: 10vh;
+        box-sizing: border-box; /* Ensure it takes full width on smaller screens */ }
+    .chart-container {
+        width: 150%; 
+        max-width: 350px; /* Make charts take full width of their container */
+        margin-bottom: 1.5rem; /* Add space between stacked charts */
+      }
+    
+      .chart-container:last-child {
+        margin-bottom: 0; /* Remove bottom margin for the last chart */
+      }
+}
