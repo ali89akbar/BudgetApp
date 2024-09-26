@@ -9,6 +9,8 @@ import SignInForm from './Components/Login/SignUp/SignIn.jsx'
 import Dashboard from './Components/Dashboard/Dashboard.jsx'
 import PieChart from './Components/Dashboard/Chart/PieChart.jsx'
 import Income from './Components/Dashboard/Pages/Income.jsx'
+import ExpenseScreen from './Components/Dashboard/Pages/Expense.jsx'
+import TotalSavings from './Components/Dashboard/Pages/TotalSavings.jsx'
 
 const router= createBrowserRouter(
   createRoutesFromElements(
@@ -18,6 +20,8 @@ const router= createBrowserRouter(
     <Route path='/dashboard' element={<Dashboard/>}/>
     <Route path='/chart' element={<PieChart/>}/>
     <Route path='/income' element={<Income/>}/>
+    <Route path='/expense' element={<ExpenseScreen/>}/>
+    <Route path='/savings' element={<TotalSavings/>}/>
     </>
   )
 )

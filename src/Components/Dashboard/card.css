@@ -192,58 +192,64 @@ font-weight: 500;
   }
   @media (max-width: 768px) {
     .content {
-      min-width: 100%;
-      margin-left: 10px; /* Adjust the width based on sidebar state */
-      padding: 20px;
-      width: 100%;
-      transition: margin-left 0.3s ease; /* Smooth transition */
+        min-width: 100%;
+        padding: 200px 0; /* Adjust padding for vertical space */
+        transition: margin-left 0.3s ease; /* Smooth transition */
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Center content horizontally */
+        height: 100vh; /* Full height of the viewport */
+        position: relative; /* Ensure positioning context */
     }
-    .my-table{
-      margin-left: 30px;
-    }
+
     .collapsed .content {
-      margin-left: 2%; /* Adjust for the collapsed sidebar */
+        margin-left: 2%; /* Adjust for the collapsed sidebar */
     }
-    
+
     .expanded .content {
-      margin-left: 200px; /* Adjust for the expanded sidebar */
+        margin-left: 200px; /* Adjust for the expanded sidebar */
     }
-    
 
-    .my-row{
-     margin-left:50px;
-     margin-top: 0px;
-     margin-right: 50px;
-     
+    .my-row {
+        display: flex; /* Use flexbox for layout */
+        flex-direction: column; /* Stack cards vertically */
+        align-items: center; /* Center cards horizontally */
+        width: 100%; /* Full width to center cards */
+        overflow: hidden; /* Prevent overflow */
     }
-   .my-card{
-    min-width: 100%
-    /* Adjust the width based on sidebar state */
-   }
 
-  .btns{
-    width: auto;
-  }
+    .my-card {
+        width: 100%; /* Full width minus margin */
+        max-width: 100vh; /* Optional max width */
+        margin: 10px 0; /* Vertical margin between cards */
+        flex-shrink: 0; /* Prevent cards from shrinking */
+        position: relative; /* Position relative to the parent */
+    }
+
+    .btns {
+        width: auto;
+    }
+
     .custom-input {
-      border: none;
-      border-bottom: 2px solid #d9d9d9; /* Default bottom border */
-      transition: border-color 0.3s;
-      padding: 10px;
-      width: auto;
-      margin-bottom: 10px;
+        border: none;
+        border-bottom: 2px solid #d9d9d9; /* Default bottom border */
+        transition: border-color 0.3s;
+        padding: 10px;
+        width: auto;
+        margin-bottom: 10px;
     }
-    
+
     .custom-input:hover {
-      border-bottom-color: #40a9ff; /* Blue bottom border on hover */
+        border-bottom-color: #40a9ff; /* Blue bottom border on hover */
     }
-    
-    /* Remove default outline and box-shadow when focused */
+
     .custom-input:focus {
-      outline: none;
-      box-shadow: none;
-      border-bottom-color: #40a9ff;
+        outline: none;
+        box-shadow: none;
+        border-bottom-color: #40a9ff;
     }
-    .tag{
-      width: auto;
+
+    .tag {
+        width: auto;
     }
-  }
+}

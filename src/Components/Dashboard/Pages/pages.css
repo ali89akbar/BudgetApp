@@ -1,0 +1,122 @@
+.charts-wrappers {
+    display: flex; /* Use flex to align charts horizontally */
+    height: auto;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0px 0px 30px 8px rgba(227, 227, 227, 0.75);
+    justify-content: space-between;
+    margin: 2rem;
+    width: 97.5%;
+    
+}
+.chart-containers {
+    flex: 1; /* Make each chart take up equal space */
+    margin-right: 1rem; /* Add some space between charts */
+}
+
+.chart-containers::after {
+    margin-right: 5; /* Remove margin for the last chart */
+}
+
+.income-screen {
+    display: flex;
+    transition: margin-left 0.3s ease; /* Smooth transition */
+  }
+  
+  .content {
+    padding: 20px;
+    flex-grow: 1; /* Allow content to grow and fill the available space */
+    margin-left: 200px; /* Sidebar width */
+  }
+  
+  .charts-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Spacing between charts */
+  }
+  
+  .chart-container {
+    flex: 1; /* Flex grow to take available space */
+    min-width: 300px; /* Minimum width for responsive layout */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px; /* Padding for chart containers */
+    border-radius: 8px; /* Rounded corners */
+    background: white; /* Background color */
+  }
+  
+  .income-card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+  
+  .income-table {
+    margin-top: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Adjust for collapsed sidebar */
+  .income-screen.collapsed .content {
+    margin-left: 60px; /* Reduced margin for collapsed sidebar */
+  }
+
+  .cards{
+    height: auto;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0px 0px 30px 8px rgba(227, 227, 227, 0.75);
+    margin: 2rem;
+    width: 97.5%;
+
+}
+.tables{
+    height: auto;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0px 0px 30px 8px rgba(227, 227, 227, 0.75);
+    margin: 2rem;
+    width: 97.5%;
+}
+  
+
+/* pages.css 
+.maindiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    
+  }
+  */
+
+
+
+@media (max-width: 1065px) {
+    .charts-wrappers {
+        flex-direction: column; /* Stack charts vertically */
+        align-items: center; /* Center the charts horizontally */
+        padding: 1rem; /* Adjust padding for smaller screens */
+        width: 100%; 
+        margin-left: 10vh;
+        box-sizing: border-box; /* Ensure it takes full width on smaller screens */ }
+    .chart-containers {
+        width: 150%; 
+        max-width: 350px; /* Make charts take full width of their container */
+        margin-bottom: 1.5rem; /* Add space between stacked charts */
+      }
+    
+      .chart-containers:last-child {
+        margin-bottom: 0; /* Remove bottom margin for the last chart */
+      }
+      .charts-wrappers {
+        flex-direction: column;
+      }
+    
+      .chart-containers {
+        margin-right: 0; /* Remove right margin in mobile view */
+        margin-bottom: 20px; /* Add bottom margin */
+      }
+    
+      .cards, .tables {
+        width: 100%; /* Full width on smaller screens */
+      }
+}

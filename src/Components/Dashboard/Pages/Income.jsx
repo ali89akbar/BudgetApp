@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Button, Table, Space, message, Row, Col } from 'antd';
+import { Card, Button, Table, Space, message, Progress } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { Chart, PieController, ArcElement, BarController, BarElement, CategoryScale, LinearScale } from 'chart.js';
 import AddIncomeModal from '../../Modals/addIncome';
 import Sidebar from '../Sidebar/Sidebar';
-
-Chart.register(PieController, ArcElement, BarController, BarElement, CategoryScale, LinearScale);
+import './pages.css';
+import { Pie, Bar } from '@ant-design/charts';
 
 const IncomeScreen = () => {
   const [isIncomeModal, setIsIncomeModal] = useState(false);
   const [incomeData, setIncomeData] = useState([]);
-  const [chartInstance, setChartInstance] = useState(null);
+  const [collapsed, setCollapsed] = useState(false);
 
   // Dummy data for income
   const dummyData = [
@@ -36,6 +35,70 @@ const IncomeScreen = () => {
     setIncomeData(dummyData);
   }, []);
 
+  const totalIncome = incomeData.reduce((sum, item) => sum + item.amount, 0);
+  const targetIncome = 10000; // Set your target income here
+
+  const pieData = incomeData.map(item => ({
+    type: item.tag,
+    value: item.amount,
+  }));
+
+  const data = incomeData.map((item) => {
+    return { date: item.date, amount: item.amount, category: item.type};
+  });
+
+ 
+
+
+  const config = {
+    data,
+    xField: 'date', // Dates on the x-axis
+    yField: 'amount', // Amounts on the y-axis
+    seriesField: 'category', // This enables grouping by category
+    colorField: 'category', // Category colors (Income, Expense, Savings)
+    color: {
+      Income: '#36cfc9',  // Color for Income
+      Expense: '#ff4d4f', // Color for Expense
+      Savings: '#73d13d', // Color for Savings
+    },
+    barWidthRatio: 0.5,
+    legend: true, // Show legend for the categories
+    xAxis: {
+      label: {
+        formatter: (v) => v, // Keep dates as they are
+      },
+    },
+    yAxis: {
+      label: {
+        formatter: (v) => `$${v}`, // Format amount as currency on y-axis
+      },
+    },
+    barStyle: {
+      radius: [4, 4, 0, 0], // Rounded top corners
+    },
+    width: 500,  // Set width for medium size
+    height: 300, // Set height for medium size
+  };
+  
+  const pieConfig = {
+    data: pieData,
+    angleField: 'value',
+    colorField: 'type',
+    radius: 0.8,
+    label: {
+      type: 'inner',
+      offset: '-30%',
+      content: '{value}',
+      style: {
+        fontSize: 14,
+        textAlign: 'center',
+        width:300,
+        height:300,
+      },
+    },
+    interactions: [{ type: 'element-selected' }, { type: 'element-active' }],
+  };
+
   const showIncomeModal = () => {
     setIsIncomeModal(true);
   };
@@ -58,67 +121,6 @@ const IncomeScreen = () => {
     message.success('Income added successfully');
     setIsIncomeModal(false); // Close modal after adding income
   };
-
-  const pieData = {
-    labels: ['Name', 'Freelancing', 'Other'],
-    datasets: [
-      {
-        data: [65, 25, 10],
-        backgroundColor: ['#4caf50', '#ff9800', '#f44336'],
-      },
-    ],
-  };
-
-  const barData = {
-    labels: ['Name', 'Freelancing', 'Other'],
-    datasets: [
-      {
-        label: 'Income',
-        data: [1200, 700, 300],
-        backgroundColor: '#3f51b5',
-      },
-    ],
-  };
-
-  useEffect(() => {
-    const ctxPie = document.getElementById('incomePieChart');
-    if (chartInstance) {
-      chartInstance.destroy(); // Destroy the previous instance
-    }
-
-    const newChartInstance = new Chart(ctxPie, {
-      type: 'pie',
-      data: pieData,
-    });
-
-    setChartInstance(newChartInstance);
-
-    return () => {
-      if (newChartInstance) {
-        newChartInstance.destroy();
-      }
-    };
-  }, [incomeData]);
-
-  useEffect(() => {
-    const ctxBar = document.getElementById('incomeBarChart');
-    if (chartInstance) {
-      chartInstance.destroy(); // Destroy the previous instance
-    }
-
-    const newChartInstance = new Chart(ctxBar, {
-      type: 'bar',
-      data: barData,
-    });
-
-    setChartInstance(newChartInstance);
-
-    return () => {
-      if (newChartInstance) {
-        newChartInstance.destroy();
-      }
-    };
-  }, [incomeData]);
 
   // Table columns with icons
   const columns = [
@@ -148,35 +150,44 @@ const IncomeScreen = () => {
     message.success('Income deleted successfully');
   };
 
+  const handleCollapseChange = (value) => {
+    setCollapsed(value);
+  };
+
+  const contentStyle = {
+    marginLeft: collapsed ? '30px' : '50px', // Adjust margin based on sidebar's width
+    transition: 'margin-left 0.3s ease', // Smooth transition
+  };
+
+
+
   return (
-    <div style={{ padding: '20px',marginBottom:"240px" }}>
-      <Sidebar/>
-      <Card title="Total Income">
-        <p>Total Income: $7000</p>
+    <div style={{ marginBottom: "13px" }}>
+            
+    <Sidebar onCollapseChange={handleCollapseChange} />
+      <Card title="Total Income" style={contentStyle} className='cards'>
+        <p>Total Income: ${totalIncome}</p>
+        <Progress percent={(totalIncome / targetIncome) * 100} />
         <Button type="primary" onClick={showIncomeModal}>
           Add Income
         </Button>
       </Card>
 
-      {/* Row for Pie and Bar Charts */}
-      <Row gutter={16} style={{ marginBottom: '20px' }}>
-        {/* Pie Chart */}
-        <Col span={12}>
-          <Card title="Income Breakdown">
-            <canvas id="incomePieChart" width="400" height="400"></canvas>
-          </Card>
-        </Col>
+      {/* Charts */}
+      <div className='charts-wrappers' style={contentStyle}>
+        <div className='chart-containers' >
+          <h2>Your Analytics</h2>
+          <Bar {...config} />
+        </div>
 
-        {/* Bar Graph */}
-        <Col span={12}>
-          <Card title="Income Over Time">
-            <canvas id="incomeBarChart" width="400" height="400"></canvas>
-          </Card>
-        </Col>
-      </Row>
+        <div>
+          <h2>Your Income Distribution</h2>
+          <Pie {...pieConfig} />
+        </div>
+      </div>
 
       {/* Income Table */}
-      <Table columns={columns} dataSource={incomeData} />
+      <Table className='tables' columns={columns} dataSource={incomeData}  style={contentStyle}/>
 
       {/* Income Modal */}
       <AddIncomeModal

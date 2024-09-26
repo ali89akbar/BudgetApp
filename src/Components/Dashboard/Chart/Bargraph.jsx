@@ -41,6 +41,7 @@ const BarChart = ({ sorted }) => {
     width: 300,  // Set width for medium size
     height: 300, // Set height for medium size
   };
+  
 
   /* const filters = sorted
     .filter((item) => item.type === 'income' || item.type === 'expense')

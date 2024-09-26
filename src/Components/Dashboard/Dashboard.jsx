@@ -149,6 +149,7 @@ return (
         />
         
         {transactions.length != 0 ? <BarChart sorted={sorted}/>: <NoTransactions/>}
+        
         <AddExpenseModal
           isExpenseModalVisible={isExpenseModal}
           handleExpenseCancel={handleExpense}

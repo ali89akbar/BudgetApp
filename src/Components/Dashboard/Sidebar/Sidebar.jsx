@@ -1,26 +1,37 @@
-import React, {useEffect, useState} from 'react'
-import Cards from '../Card.jsx'
-import { Modal } from 'antd'
-import AddExpenseModal from '../../Modals/addExpense.jsx'
-import AddIncomeModal from '../../Modals/addIncome.jsx'
-import Tables from '../Transaction table/Table.jsx';
-import { UploadOutlined, UserOutlined, VideoCameraOutlined, DollarOutlined, BankOutlined } from '@ant-design/icons';
-import { Layout, Menu, theme } from 'antd';
-const { Header, Content, Footer, Sider } = Layout;
-const items = [UserOutlined, VideoCameraOutlined, UploadOutlined, UserOutlined].map(
-  (icon, index) => ({
-    key: String(index + 1),
-    icon: React.createElement(icon),
-    label: `nav ${index + 1}`,
-  }),
-);
-import "./sidebar.css"
+import React, { useState } from 'react';
+import { Layout, Menu } from 'antd';
+import { UserOutlined, UploadOutlined, DollarOutlined, BankOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
+import "./sidebar.css";
+
+const { Sider } = Layout;
+
 const Sidebar = ({ onCollapseChange }) => {
   const [collapsed, setCollapsed] = useState(false);
+  const navigate = useNavigate(); // Hook for navigation
 
   const handleCollapse = (value) => {
     setCollapsed(value);
     onCollapseChange(value); // Notify parent component
+  };
+
+  const handleMenuClick = (key) => {
+    switch (key) {
+      case '1':
+        navigate('/dashboard');
+        break;
+      case '2':
+        navigate('/income');
+        break;
+      case '3':
+        navigate('/expense');
+        break;
+      case '4':
+        navigate('/savings');
+        break;
+      default:
+        break;
+    }
   };
 
   const items = [
@@ -55,7 +66,13 @@ const Sidebar = ({ onCollapseChange }) => {
         onCollapse={handleCollapse}
       >
         <div className="demo-logo-vertical" />
-        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
+        <Menu
+          theme="dark"
+          defaultSelectedKeys={['1']}
+          mode="inline"
+          items={items}
+          onClick={({ key }) => handleMenuClick(key)} // Handle menu item clicks
+        />
       </Sider>
     </Layout>
   );

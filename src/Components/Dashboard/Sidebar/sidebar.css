@@ -31,3 +31,14 @@
     height: auto; /* Adjust the height as needed */
 }
   
+@media (max-width: 768px) {
+    .sidebar {
+        width: 25%; /* Sidebar width on smaller screens */
+        margin-left: 0; /* Remove margin for smaller screens */
+    }
+
+    .content {
+        margin-left: 25%; /* Adjust the margin to account for the sidebar's width */
+        width: 75%; /* Adjust the width of the content area */
+    }
+}
