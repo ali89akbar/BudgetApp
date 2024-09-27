@@ -123,26 +123,7 @@ font-weight: 500;
     background-color: #40a9ff;
   }
   
-  .input-flex {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 0.5rem;
-    width: 100%;
-    box-shadow: 0px 0px 30px 8px rgba(227, 227, 227, 0.75);
-    border-radius: 0.5rem;
-    padding: 0rem 0.5rem;
-  }
   
-  .input-flex input {
-    width: 100%;
-    padding: 0.5rem;
-    border: 0;
-  }
-  
-  .input-flex input:focus {
-    outline: none;
-  }
   
   .select-input {
     width: 30%;
@@ -165,19 +146,13 @@ font-weight: 500;
     border: 0px solid #fff !important;
   }
   
-  .my-table {
-    box-shadow: 0px 0px 30px 8px rgba(227, 227, 227, 0.75);
-    border-radius: 0.5rem !important;
-    padding: 2rem;
-    margin-bottom: 4rem;
-  }
-  
+ 
   .dashboard-container {
     padding-bottom: 1rem;
   }
 
   .btns{
-    width: 400px;
+    width: auto;
     background-color: #1890ff;
     display: inline;
     text-transform: none; 
@@ -199,31 +174,27 @@ font-weight: 500;
         flex-direction: column;
         align-items: center; /* Center content horizontally */
         height: 100vh; /* Full height of the viewport */
-        position: relative; /* Ensure positioning context */
     }
 
     .collapsed .content {
         margin-left: 2%; /* Adjust for the collapsed sidebar */
     }
 
-    .expanded .content {
-        margin-left: 200px; /* Adjust for the expanded sidebar */
-    }
+  
 
     .my-row {
         display: flex; /* Use flexbox for layout */
         flex-direction: column; /* Stack cards vertically */
         align-items: center; /* Center cards horizontally */
-        width: 100%; /* Full width to center cards */
-        overflow: hidden; /* Prevent overflow */
-    }
+        min-width: 100%;
+        width: 50%;
+         /* Full width to center cards */
+    
+      }
 
     .my-card {
         width: 100%; /* Full width minus margin */
-        max-width: 100vh; /* Optional max width */
-        margin: 10px 0; /* Vertical margin between cards */
-        flex-shrink: 0; /* Prevent cards from shrinking */
-        position: relative; /* Position relative to the parent */
+        min-width: 50vh; /* Optional max width */
     }
 
     .btns {

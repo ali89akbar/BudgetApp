@@ -1,0 +1,84 @@
+  .tabs{
+    width: 100%;
+    max-width: 100%;
+    padding: 0rem 0rem;
+  }
+  .table-2{
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+   align-items: center;
+    margin-bottom: 1rem;
+  }
+
+.my-table {
+    box-shadow: 0px 0px 30px 8px rgba(227, 227, 227, 0.75);
+    border-radius: 0.5rem !important;
+    padding: 2rem;
+    margin-bottom: 4rem;
+  }
+
+.table-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+  .input-flex {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    box-shadow: 0px 0px 30px 8px rgba(227, 227, 227, 0.75);
+    border-radius: 0.5rem;
+    padding: 0rem 0.5rem;
+  }
+  
+  .input-flex input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 0;
+  }
+  
+  .input-flex input:focus {
+    outline: none;
+  }
+
+  .tables {
+    width: 100%;
+    overflow-x: auto;
+  }
+  
+  .ant-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+  }
+  @media (max-width:768){
+    .my-table {
+        display: flex; /* Use flexbox for layout */
+        flex-direction: column; /* Stack cards vertically */
+        align-items: center; /* Center cards horizontally */
+    }
+    .input-flex {
+        padding: 0.25rem 0.5rem;
+      }
+    .btns{
+        width: auto;
+    }
+      /* Stack items vertically on small screens */
+      .table-2 {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+    
+      /* Adjust button container */
+      .table-head {
+        width: 100%;
+        justify-content: space-around;
+      }
+      
+  }

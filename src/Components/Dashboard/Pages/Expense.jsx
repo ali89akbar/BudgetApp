@@ -157,6 +157,7 @@ const ExpenseScreen = () => {
   return (
     <div className='maindiv'>
       <Sidebar onCollapseChange={handleCollapseChange} />
+    <div className='content'>
       <Card title="Total Expense" style={contentStyle} className='cards'>
         <p>Total Expense: ${totalExpense}</p>
         <Progress percent={targetExpense > 0 ? (totalExpense / targetExpense) * 100 : 0} />
@@ -187,6 +188,7 @@ const ExpenseScreen = () => {
         handleExpenseCancel={handleExpenseCancel}
         onFinish={onFinish}
       />
+      </div>
     </div>
   );
 };

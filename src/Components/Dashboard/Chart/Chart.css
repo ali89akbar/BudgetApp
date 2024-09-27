@@ -6,7 +6,7 @@
     box-shadow: 0px 0px 30px 8px rgba(227, 227, 227, 0.75);
     justify-content: space-between;
     margin: 2rem;
-    width: 96%;
+    width: 100%;
 }
 .chart-container {
     flex: 1; /* Make each chart take up equal space */
@@ -17,16 +17,18 @@
     margin-right: 0; /* Remove margin for the last chart */
 }
 
-@media (max-width: 1065px) {
+@media (max-width: 768px) {
     .charts-wrapper {
-        flex-direction: column; /* Stack charts vertically */
-        align-items: center; /* Center the charts horizontally */
-        padding: 1rem; /* Adjust padding for smaller screens */
-        width: 50%; 
-        box-sizing: border-box; /* Ensure it takes full width on smaller screens */ }
-    .chart-container {
+        display: flex; /* Use flexbox for layout */
+        flex-direction: column; /* Stack cards vertically */
+        align-items: center; /* Center cards horizontally */
         
-        max-width: 150px; /* Make charts take full width of their container */
+        min-width: 100%;
+        width: 50%;
+        }
+    .chart-container {
+        width: 100%; /* Full width minus margin */
+        min-width: 55vh; /* Optional max width */
         margin-bottom: 1.5rem; /* Add space between stacked charts */
       }
     

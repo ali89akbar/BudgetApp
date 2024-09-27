@@ -1,8 +1,8 @@
 import { Table,Select,Radio } from 'antd'
 import { unparse } from 'papaparse';
 import React, { useState } from 'react'
-
-const Tables = ({transactions}) => {
+import './table.css'
+const Tables = ({transactions,contentStyle}) => {
     let {Option}= Select;
     const [search,setSearch]=useState("");
     const [sortKey,setSortKey]=useState("");
@@ -70,21 +70,8 @@ const Tables = ({transactions}) => {
   }
   
   return (
-    <div
-      style={{
-        width: "100%",
-        padding: "0rem 2rem",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          gap: "1rem",
-          alignItems: "center",
-          marginBottom: "1rem",
-        }}
-      >
+    <div className='tabs' style={contentStyle} >
+      <div className='table-2'  >
         <div className="input-flex">
     <input
     value={search}
@@ -113,16 +100,8 @@ const Tables = ({transactions}) => {
   <Option value="December">December</Option>
 </Select>
     </div>
-    <div className="my-table">
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            width: "100%",
-            marginBottom: "1rem",
-          }}
-        >
+    <div className="my-table" >
+        <div style={{display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center",gap:"10px"}}>
           <h2>Transactions</h2>
     <Radio.Group
             className="input-radio"

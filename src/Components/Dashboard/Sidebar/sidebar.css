@@ -7,7 +7,7 @@
 }
 
 .sidebar {
-    width: 10%; /* Adjust the width of the sidebar */
+    width: 5vh; /* Adjust the width of the sidebar */
     height: 100vh; /* Full height of the page */
     position: fixed; /* Fix it to the left side */
     left: 0;
@@ -21,24 +21,40 @@
     width: 80vw; /* Adjust the width of the content area */
     height: 100vh; /* Full height of the page */
     position: relative; /* Remove fixed position */
-
     margin-bottom: 100vh;
 
 }
 
-.my-table {
-    width: 100%; /* Make the table take up the full width of the content area */
-    height: auto; /* Adjust the height as needed */
-}
-  
+
 @media (max-width: 768px) {
+    .layout-container {
+      flex-direction: column; /* Stack content vertically on smaller screens */
+    }
+  
     .sidebar {
-        width: 25%; /* Sidebar width on smaller screens */
-        margin-left: 0; /* Remove margin for smaller screens */
+      min-width: 200px; /* Sidebar takes full width */
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      z-index: 1000; /* Ensure it's above other content */
+      height: auto; /* Adjust height for mobile */
     }
 
-    .content {
-        margin-left: 25%; /* Adjust the margin to account for the sidebar's width */
-        width: 75%; /* Adjust the width of the content area */
+
+    .demo-logo-vertical {
+      display: none; /* Hide the logo on smaller screens if needed */
     }
+  
+    .ant-menu {
+      display: flex;
+      justify-content: center; /* Center menu items */
+      flex-grow: 1;
+      flex-direction: column;
+    }
+  }
+  
+   /* .content {
+       /* margin-left: 25%;  Adjust the margin to account for the sidebar's width */
+      /*  width: 75%;  Adjust the width of the content area */
+     /*
 }

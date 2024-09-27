@@ -128,27 +128,36 @@ const Dashboard = () => {
   };
 
   const contentStyle = {
-    marginLeft: collapsed ? '0px' : '200px', // Adjust margin based on sidebar's width
-    transition: 'margin-left 0.3s ease', // Smooth transition
-  };
+    marginLeft: collapsed ? '50px' : '80px', // Adjust margin based on sidebar's width
+    transition: 'margin-left 0.3s ease' // Smooth transition
+  //'@media (max-width: 768px)': {
+    //marginLeft: collapsed ? '30px' : '50px',
+    //transition: 'margin-left 0.3s ease', // Smooth transition
+    // Adjust margin for smaller screens
+  }
+
+
 
 let sorted = transactions.sort((a,b)=>{
   return new Date(a.date) - new Date(b.date);
 })
 
 return (
-    <div style={{ display: "flex", flexDirection: "column" }}>
-      <Sidebar onCollapseChange={handleCollapseChange} />
-      <div className="content" style={contentStyle}>
+    <div className='mains' style={{direction:"flex"}}>
+      <Sidebar onCollapseChange={handleCollapseChange} contentStyle={contentStyle} />
+      <div className="content" style={contentStyle} >
         <Cards
           Income={Income}
           expense={expense}
           total={total}
           showExpenseModal={showExpenseModal}
           showIncomeModal={showIncomeModal}
-        />
+          contentStyle={contentStyle}
+       />
         
-        {transactions.length != 0 ? <BarChart sorted={sorted}/>: <NoTransactions/>}
+        {transactions.length != 0 ? <BarChart sorted={sorted} 
+        contentStyle={contentStyle}
+        handleCollapseChange={handleCollapseChange}/>: <NoTransactions/>}
         
         <AddExpenseModal
           isExpenseModalVisible={isExpenseModal}
@@ -160,7 +169,9 @@ return (
           handleIncomeCancel={handleIncome}
           onFinish={onFinish}
         />
-        <Tables transactions={transactions} />
+        <Tables 
+         contentStyle={contentStyle} 
+         transactions={transactions} />
       </div>
     </div>
   );

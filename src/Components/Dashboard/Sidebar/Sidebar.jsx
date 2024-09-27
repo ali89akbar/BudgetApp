@@ -56,7 +56,7 @@ const Sidebar = ({ onCollapseChange }) => {
       label: 'Savings',
     },
   ];
-
+  
   return (
     <Layout className='layout-container'>
       <Sider
@@ -64,6 +64,7 @@ const Sidebar = ({ onCollapseChange }) => {
         collapsible
         collapsed={collapsed}
         onCollapse={handleCollapse}
+        width={129}
       >
         <div className="demo-logo-vertical" />
         <Menu

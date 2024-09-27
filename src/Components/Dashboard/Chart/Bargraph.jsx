@@ -3,7 +3,8 @@ import { Bar, Pie } from '@ant-design/charts';
 import PieChart from './PieChart';
 import './Chart.css'
 
-const BarChart = ({ sorted }) => {
+const BarChart = ({ sorted,contentStyle,
+          handleCollapseChange }) => {
   // Assume that `sorted` contains { date, amount, category } for each item
   const data = sorted.map((item) => {
     return { date: item.date, amount: item.amount, category: item.type};
@@ -66,7 +67,7 @@ const BarChart = ({ sorted }) => {
      // Set height for medium size
   };*/
   return(
-    <div className='charts-wrapper'>
+    <div className='charts-wrapper' style={contentStyle}>
       <div className='chart-container'>
       <h2>Your Analytics</h2>
       <Bar

@@ -76,7 +76,7 @@ const IncomeScreen = () => {
     barStyle: {
       radius: [4, 4, 0, 0], // Rounded top corners
     },
-    width: 500,  // Set width for medium size
+    autoFit:true, // Set width for medium size
     height: 300, // Set height for medium size
   };
   
@@ -165,7 +165,8 @@ const IncomeScreen = () => {
     <div style={{ marginBottom: "13px" }}>
             
     <Sidebar onCollapseChange={handleCollapseChange} />
-      <Card title="Total Income" style={contentStyle} className='cards'>
+      <div className='content' style={contentStyle}>
+      <Card title="Total Income"  className='cards'>
         <p>Total Income: ${totalIncome}</p>
         <Progress percent={(totalIncome / targetIncome) * 100} />
         <Button type="primary" onClick={showIncomeModal}>
@@ -174,7 +175,7 @@ const IncomeScreen = () => {
       </Card>
 
       {/* Charts */}
-      <div className='charts-wrappers' style={contentStyle}>
+      <div className='charts-wrappers' >
         <div className='chart-containers' >
           <h2>Your Analytics</h2>
           <Bar {...config} />
@@ -195,6 +196,7 @@ const IncomeScreen = () => {
         handleIncomeCancel={handleIncomeCancel}
         onFinish={onFinish}
       />
+    </div>
     </div>
   );
 };

@@ -147,7 +147,6 @@ const TotalSavings = () => {
     width:200,
     height: 200,
     interactions: [{ type: 'element-selected' }, { type: 'element-active' }],
-    interactions: [{ type: 'element-selected' }, { type: 'element-active' }],
   };
 
   const showIncomeModal = () => {
@@ -235,6 +234,7 @@ const TotalSavings = () => {
   return (
     <div style={{ marginTop: "100px" }}>
       <Sidebar onCollapseChange={handleCollapseChange} />
+      <div className='content'>
       <Card title="Total Income" style={contentStyle} className='cards'>
         <p>Total Income: ${totalIncome}</p>
         <p>Total Expense: ${totalExpense}</p>
@@ -280,6 +280,7 @@ const TotalSavings = () => {
         handleExpenseCancel={handleExpenseCancel}
         onFinish={onExpenseFinish}
       />
+      </div>
     </div>
   );
 };

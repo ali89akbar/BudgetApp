@@ -2,10 +2,11 @@ import { Row, Card, Button } from 'antd'
 import React from 'react';
 import './card.css';
 
-const Cards = ({total, Income,expense, showExpenseModal,showIncomeModal}) => {
+const Cards = ({total,contentStyle, Income,expense, showExpenseModal,showIncomeModal}) => {
+  
   return (
     <div>
-       <Row className='my-row'
+       <Row className='my-row' style={contentStyle}
     >
       <Card bordered={true} className="my-card">
         <h2>Current Balance</h2>
