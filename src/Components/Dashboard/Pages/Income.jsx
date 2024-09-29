@@ -76,8 +76,8 @@ const IncomeScreen = () => {
     barStyle: {
       radius: [4, 4, 0, 0], // Rounded top corners
     },
-    width: 500,  // Set width for medium size
-    height: 300, // Set height for medium size
+    // width: 500,  // Set width for medium size
+    // height: 300, // Set height for medium size
   };
   
   const pieConfig = {
@@ -166,7 +166,7 @@ const IncomeScreen = () => {
             
     <Sidebar  />
      <div className='content' >
-     <Card title="Total Income" style={contentStyle} >
+     <Card title="Total Income"  >
         <p>Total Income: ${totalIncome}</p>
         <Progress percent={(totalIncome / targetIncome) * 100} />
         <Button type="primary" onClick={showIncomeModal}>
@@ -175,7 +175,7 @@ const IncomeScreen = () => {
       </Card>
 
       {/* Charts */}
-      <div className='charts-wrapper' style={contentStyle}>
+      <div className='charts-wrapper'  >
         <div className='chart-container' >
           <h2>Your Analytics</h2>
           <Bar {...config} />
@@ -186,8 +186,8 @@ const IncomeScreen = () => {
           <Pie {...pieConfig} />
         </div>
       </div>
-      <Table className='tables' columns={columns} dataSource={incomeData}  style={contentStyle}/>
-
+      <Table scroll={{ x: 'max-content'}} columns={columns} dataSource={incomeData} />
+     
      </div>
 
       {/* Income Table */}

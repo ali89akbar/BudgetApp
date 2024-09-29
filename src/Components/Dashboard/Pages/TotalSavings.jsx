@@ -107,8 +107,8 @@ const TotalSavings = () => {
     barStyle: {
       radius: [4, 4, 0, 0],
     },
-    width: 500,
-    height: 300,
+    // width: 500,
+    // height: 300,
   };
 
   const pieConfigIncome = {
@@ -235,7 +235,7 @@ const TotalSavings = () => {
     <div className='maindiv'>
       <Sidebar onCollapseChange={handleCollapseChange} />
       <div className='content'>
-      <Card title="Total Income" style={contentStyle}>
+      <Card title="Total Income" >
         <p>Total Income: ${totalIncome}</p>
         <p>Total Expense: ${totalExpense}</p>
         <p>Total Savings: ${totalSavings}</p>
@@ -249,8 +249,8 @@ const TotalSavings = () => {
       </Card>
 
       {/* Charts */}
-      <div className='charts-wrappers' style={contentStyle}>
-        <div className='chart-containers'>
+      <div className='charts-wrapper' >
+        <div className='chart-container'>
           <h2>Your Income Analytics</h2>
           <Bar {...config} />
         </div>
@@ -265,7 +265,7 @@ const TotalSavings = () => {
       </div>
 
       {/* Income Table */}
-      <Table className='tables' columns={columns} dataSource={incomeData} style={contentStyle} />
+      <Table scroll={{ x: 'max-content'}} columns={columns} dataSource={incomeData}  />
 
       {/* Income Modal */}
       <AddIncomeModal

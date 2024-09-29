@@ -137,9 +137,9 @@ let sorted = transactions.sort((a,b)=>{
 })
 
 return (
-    <div style={{display:'flex', border:'8px solid green',width:'100%' }}>
+    <div style={{display:'flex', width:'100%' }}>
       <Sidebar onCollapseChange={handleCollapseChange} />
-      <div className="content" style={contentStyle}>
+      <div className="content" >
         <Cards
           Income={Income}
           expense={expense}

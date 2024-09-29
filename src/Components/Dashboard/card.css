@@ -191,7 +191,7 @@ font-weight: 500;
   }
   @media (max-width: 768px) {
     .content {
-        min-width: 100%;
+        /* min-width: 100%; */
         /* padding: 200px 0; Adjust padding for vertical space */
         transition: margin-left 0.3s ease; /* Smooth transition */
         display: flex;

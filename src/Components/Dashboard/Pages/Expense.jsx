@@ -74,8 +74,8 @@ const ExpenseScreen = () => {
     barStyle: {
       radius: [4, 4, 0, 0],
     },
-    width:500,
-    height: 300,
+    // width:500,
+    // height: 300,
   };
 
   const pieConfig = {
@@ -158,7 +158,7 @@ const ExpenseScreen = () => {
     <div className='maindiv'>
       <Sidebar  onCollapseChange={handleCollapseChange}  />
       <div className='content'>
-      <Card title="Total Expense" style={contentStyle} className='cards'>
+      <Card title="Total Expense"  >
         <p>Total Expense: ${totalExpense}</p>
         <Progress percent={targetExpense > 0 ? (totalExpense / targetExpense) * 100 : 0} />
         <Button type="primary" onClick={showExpenseModal}>
@@ -167,7 +167,7 @@ const ExpenseScreen = () => {
       </Card>
 
       {/* Charts */}
-      <div className='charts-wrapper'style={contentStyle}>
+      <div className='charts-wrapper'>
         <div className='chart-container'>
           <h2>Your Analytics</h2>
           <Bar {...config} />
@@ -178,7 +178,7 @@ const ExpenseScreen = () => {
           <Pie {...pieConfig} />
         </div>
       </div>
-      <Table className='tables' columns={columns} dataSource={expenseData} style={contentStyle} />
+      <Table scroll={{ x: 'max-content'}} columns={columns} dataSource={expenseData} style={contentStyle} />
 
       </div>
       {/* Expense Table */}
