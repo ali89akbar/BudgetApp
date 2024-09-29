@@ -61,6 +61,7 @@ const Sidebar = ({ onCollapseChange }) => {
     <Layout className='layout-container'>
       <Sider
         className='sidebar'
+        // width='50px'
         collapsible
         collapsed={collapsed}
         onCollapse={handleCollapse}
@@ -68,7 +69,6 @@ const Sidebar = ({ onCollapseChange }) => {
         <div className="demo-logo-vertical" />
         <Menu
           theme="dark"
-          defaultSelectedKeys={['1']}
           mode="inline"
           items={items}
           onClick={({ key }) => handleMenuClick(key)} // Handle menu item clicks

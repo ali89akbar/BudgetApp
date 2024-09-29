@@ -128,7 +128,7 @@ const Dashboard = () => {
   };
 
   const contentStyle = {
-    marginLeft: collapsed ? '0px' : '200px', // Adjust margin based on sidebar's width
+    marginLeft: collapsed ? '0px' : '0px', // Adjust margin based on sidebar's width
     transition: 'margin-left 0.3s ease', // Smooth transition
   };
 
@@ -137,7 +137,7 @@ let sorted = transactions.sort((a,b)=>{
 })
 
 return (
-    <div style={{ display: "flex", flexDirection: "column" }}>
+    <div style={{display:'flex', border:'8px solid green',width:'100%' }}>
       <Sidebar onCollapseChange={handleCollapseChange} />
       <div className="content" style={contentStyle}>
         <Cards

@@ -156,7 +156,8 @@ const ExpenseScreen = () => {
 
   return (
     <div className='maindiv'>
-      <Sidebar onCollapseChange={handleCollapseChange} />
+      <Sidebar  onCollapseChange={handleCollapseChange}  />
+      <div className='content'>
       <Card title="Total Expense" style={contentStyle} className='cards'>
         <p>Total Expense: ${totalExpense}</p>
         <Progress percent={targetExpense > 0 ? (totalExpense / targetExpense) * 100 : 0} />
@@ -166,8 +167,8 @@ const ExpenseScreen = () => {
       </Card>
 
       {/* Charts */}
-      <div className='charts-wrappers' style={contentStyle}>
-        <div className='chart-containers'>
+      <div className='charts-wrapper'style={contentStyle}>
+        <div className='chart-container'>
           <h2>Your Analytics</h2>
           <Bar {...config} />
         </div>
@@ -177,10 +178,11 @@ const ExpenseScreen = () => {
           <Pie {...pieConfig} />
         </div>
       </div>
-
-      {/* Expense Table */}
       <Table className='tables' columns={columns} dataSource={expenseData} style={contentStyle} />
 
+      </div>
+      {/* Expense Table */}
+    
       {/* Expense Modal */}
       <AddExpenseModal
         isExpenseModalVisible={isExpenseModal}

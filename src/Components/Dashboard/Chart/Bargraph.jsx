@@ -66,7 +66,7 @@ const BarChart = ({ sorted }) => {
      // Set height for medium size
   };*/
   return(
-    <div className='charts-wrapper'>
+    <div className='charts-wrapper' style={{display:'flex',justifyContent:'center',alignItems:'center',border:'10px solid black'}}>
       <div className='chart-container'>
       <h2>Your Analytics</h2>
       <Bar

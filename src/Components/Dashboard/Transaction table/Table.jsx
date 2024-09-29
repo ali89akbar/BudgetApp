@@ -113,7 +113,7 @@ const Tables = ({transactions}) => {
   <Option value="December">December</Option>
 </Select>
     </div>
-    <div className="my-table">
+    <div className="my-table" >
         <div
           style={{
             display: "flex",
@@ -134,12 +134,15 @@ const Tables = ({transactions}) => {
             <Radio.Button value="amount">Sort by Amount</Radio.Button>
           </Radio.Group>
 
+         
+          </div>
           <div
             style={{
               display: "flex",
               justifyContent: "center",
               gap: "1rem",
-              width: "400px",
+              width: "300px",
+              marginBottom:'1rem'
             }}
           >
             <button className="btns" onClick={exportToCsv}>
@@ -159,9 +162,8 @@ const Tables = ({transactions}) => {
               style={{ display: "none" }}
             />
           </div>
-          </div>
 
-    <Table  dataSource={sorted} columns={column}/>
+    <Table  scroll={{ x: 'max-content' }}  dataSource={sorted} columns={column}/>
     
     
     </div>

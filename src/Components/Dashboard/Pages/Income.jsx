@@ -155,17 +155,18 @@ const IncomeScreen = () => {
   };
 
   const contentStyle = {
-    marginLeft: collapsed ? '30px' : '50px', // Adjust margin based on sidebar's width
+    marginLeft: collapsed ? '10px' : '0px', // Adjust margin based on sidebar's width
     transition: 'margin-left 0.3s ease', // Smooth transition
   };
 
 
 
   return (
-    <div style={{ marginBottom: "13px" }}>
+    <div style={{border: '5px solid purple' , display:'flex', width:'100%'}}>
             
-    <Sidebar onCollapseChange={handleCollapseChange} />
-      <Card title="Total Income" style={contentStyle} className='cards'>
+    <Sidebar  />
+     <div className='content' >
+     <Card title="Total Income" style={contentStyle} >
         <p>Total Income: ${totalIncome}</p>
         <Progress percent={(totalIncome / targetIncome) * 100} />
         <Button type="primary" onClick={showIncomeModal}>
@@ -174,8 +175,8 @@ const IncomeScreen = () => {
       </Card>
 
       {/* Charts */}
-      <div className='charts-wrappers' style={contentStyle}>
-        <div className='chart-containers' >
+      <div className='charts-wrapper' style={contentStyle}>
+        <div className='chart-container' >
           <h2>Your Analytics</h2>
           <Bar {...config} />
         </div>
@@ -185,9 +186,11 @@ const IncomeScreen = () => {
           <Pie {...pieConfig} />
         </div>
       </div>
+      <Table className='tables' columns={columns} dataSource={incomeData}  style={contentStyle}/>
+
+     </div>
 
       {/* Income Table */}
-      <Table className='tables' columns={columns} dataSource={incomeData}  style={contentStyle}/>
 
       {/* Income Modal */}
       <AddIncomeModal

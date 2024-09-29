@@ -2,6 +2,8 @@
   width: calc(100% - 50px); /* Adjust the width based on sidebar state */
   padding: 20px;
   transition: margin-left 0.3s ease; /* Smooth transition */
+  
+  /* height: 200px; */
 }
 
 .collapsed .content {
@@ -21,11 +23,12 @@
   display: flex;
   justify-content: space-between; /* Space between cards */
   align-items: flex-start;
-  margin-top: 3rem;
+  /* margin-top: 3rem; */
   width: 100%;
   flex-wrap: wrap; /* Allow wrapping on smaller screens */
   gap: 5px; /* Space between the cards */
   box-sizing: border-box;
+  border: 4px solid purple;
 }
 
 .my-card {
@@ -36,6 +39,7 @@
   box-sizing: border-box;
   max-width: calc(33.33% - 0rem); /* Ensure the cards don't exceed one-third of the row */
   font-family: 'Montserrat', 'sans-serif' !important;
+  border: 1px solid black;
 }
 
 
@@ -165,12 +169,7 @@ font-weight: 500;
     border: 0px solid #fff !important;
   }
   
-  .my-table {
-    box-shadow: 0px 0px 30px 8px rgba(227, 227, 227, 0.75);
-    border-radius: 0.5rem !important;
-    padding: 2rem;
-    margin-bottom: 4rem;
-  }
+
   
   .dashboard-container {
     padding-bottom: 1rem;
@@ -193,22 +192,15 @@ font-weight: 500;
   @media (max-width: 768px) {
     .content {
         min-width: 100%;
-        padding: 200px 0; /* Adjust padding for vertical space */
+        /* padding: 200px 0; Adjust padding for vertical space */
         transition: margin-left 0.3s ease; /* Smooth transition */
         display: flex;
         flex-direction: column;
         align-items: center; /* Center content horizontally */
-        height: 100vh; /* Full height of the viewport */
         position: relative; /* Ensure positioning context */
+        background-color: red;
     }
 
-    .collapsed .content {
-        margin-left: 2%; /* Adjust for the collapsed sidebar */
-    }
-
-    .expanded .content {
-        margin-left: 200px; /* Adjust for the expanded sidebar */
-    }
 
     .my-row {
         display: flex; /* Use flexbox for layout */
@@ -224,6 +216,7 @@ font-weight: 500;
         margin: 10px 0; /* Vertical margin between cards */
         flex-shrink: 0; /* Prevent cards from shrinking */
         position: relative; /* Position relative to the parent */
+       
     }
 
     .btns {
