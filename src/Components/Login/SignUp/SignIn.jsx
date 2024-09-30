@@ -96,7 +96,7 @@ function handleSignOut(e){
           value={state.password}
           onChange={handleChange}
         />
-        <a href="#">Forgot your password?</a>
+        <Link to="/forget">Forgot your password?</Link>
         
         <button>Sign In</button>
         <div className="account-text"

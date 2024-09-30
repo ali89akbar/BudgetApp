@@ -395,6 +395,47 @@ a:hover {
 .sign{
   margin-top:10px
 }
+
+
+.forgot-password-container {
+  max-width: 550px;
+  margin: 40px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19);
+}
+
+.forgot-password-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.forgot-password-container form {
+  display: flex;
+  flex-direction: column;
+}
+
+.forgot-password-container input {
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.forgot-password-container button[type='submit'] {
+  background-color:  #00d2ff;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  width: auto;
+  cursor: pointer;
+}
+
+.forgot-password-container button[type='submit']:hover {
+  background-color:  #00d2ff;
+}
 /* For tablets (screens 1024px and below) */
 @media (max-width: 1024px) {
   .account-text {
@@ -419,6 +460,12 @@ a:hover {
 
 
 @media (max-width: 768px) {
+  .forgot-password-container {
+  align-items: center;
+  justify-content: center;
+  min-width: auto;/* Center form */
+    padding: 20px;  /* Adjust padding for smaller screens */
+  }
   .account-text {
     display: initial;
     margin-top: 30px;

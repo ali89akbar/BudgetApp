@@ -19,8 +19,8 @@ const PieChart = ({ sorted }) => {
       content: '{name}\n{percentage}', // Display the percentage of each slice
     },
     interactions: [{ type: 'element-active' }],
-    width: 300,  // Set width for medium size
-    height: 300, // Set height for medium size
+  //  width: 300,  // Set width for medium size
+    //height: 300, // Set height for medium size
   };
 
   return <Pie {...configs} />;

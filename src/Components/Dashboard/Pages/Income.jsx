@@ -91,13 +91,10 @@ const IncomeScreen = () => {
       type: 'inner',
       offset: '-30%',
       content: '{value}',
-      style: {
-        fontSize: 14,
-        textAlign: 'center',
-        width:300,
-        height:300,
-      },
+      
     },
+    //width:400,
+    //height:400,
     interactions: [{ type: 'element-selected' }, { type: 'element-active' }],
   };
 
@@ -156,10 +153,7 @@ const IncomeScreen = () => {
     setCollapsed(value);
   };
 
-  const contentStyle = {
-    marginLeft: collapsed ? '10px' : '0px', // Adjust margin based on sidebar's width
-    transition: 'margin-left 0.3s ease', // Smooth transition
-  };
+
 
 
 
@@ -183,7 +177,8 @@ const IncomeScreen = () => {
           <Bar {...config} />
         </div>
 
-        <div>
+        <div  className='chart-container'>
+
           <h2>Your Income Distribution</h2>
           <Pie {...pieConfig} />
         </div>

@@ -11,6 +11,7 @@ import PieChart from './Components/Dashboard/Chart/PieChart.jsx'
 import Income from './Components/Dashboard/Pages/Income.jsx'
 import ExpenseScreen from './Components/Dashboard/Pages/Expense.jsx'
 import TotalSavings from './Components/Dashboard/Pages/TotalSavings.jsx'
+import Forget from './Components/Login/SignUp/Forget.jsx'
 
 const router= createBrowserRouter(
   createRoutesFromElements(
@@ -22,6 +23,7 @@ const router= createBrowserRouter(
     <Route path='/income' element={<Income/>}/>
     <Route path='/expense' element={<ExpenseScreen/>}/>
     <Route path='/savings' element={<TotalSavings/>}/>
+    <Route path='/forget' element={<Forget/>}/>
     </>
   )
 )
