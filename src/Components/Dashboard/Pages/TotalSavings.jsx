@@ -235,7 +235,7 @@ const TotalSavings = () => {
     <div className='maindiv'>
       <Sidebar onCollapseChange={handleCollapseChange} />
       <div className='content'>
-      <Card title="Total Income" >
+      <Card title="Total Income" className='cards'>
         <p>Total Income: ${totalIncome}</p>
         <p>Total Expense: ${totalExpense}</p>
         <p>Total Savings: ${totalSavings}</p>

@@ -147,8 +147,11 @@ return (
           showExpenseModal={showExpenseModal}
           showIncomeModal={showIncomeModal}
         />
+          {transactions.length != 0 ? <BarChart sorted={sorted}/>: <NoTransactions/>}
+
+          
+          
         
-        {transactions.length != 0 ? <BarChart sorted={sorted}/>: <NoTransactions/>}
         
         <AddExpenseModal
           isExpenseModalVisible={isExpenseModal}

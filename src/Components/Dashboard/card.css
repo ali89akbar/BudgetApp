@@ -28,7 +28,6 @@
   flex-wrap: wrap; /* Allow wrapping on smaller screens */
   gap: 5px; /* Space between the cards */
   box-sizing: border-box;
-  border: 4px solid purple;
 }
 
 .my-card {
@@ -39,7 +38,6 @@
   box-sizing: border-box;
   max-width: calc(33.33% - 0rem); /* Ensure the cards don't exceed one-third of the row */
   font-family: 'Montserrat', 'sans-serif' !important;
-  border: 1px solid black;
 }
 
 
@@ -198,7 +196,6 @@ font-weight: 500;
         flex-direction: column;
         align-items: center; /* Center content horizontally */
         position: relative; /* Ensure positioning context */
-        background-color: red;
     }
 
 

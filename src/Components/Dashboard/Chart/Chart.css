@@ -2,13 +2,15 @@
     display: flex;
   justify-content: space-between; /* Space between cards */
   align-items: flex-start;
-  /* margin-top: 3rem; */
+   margin-top: 1rem; 
+  margin-bottom: 1rem;
   width: 100%;
   flex-wrap: wrap; /* Allow wrapping on smaller screens */
   gap: 5px; /* Space between the cards */
   box-sizing: border-box;
-  border: 4px solid purple;
-    /* border: 1px solid black; */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19);
+  border-radius: 0.5rem;
+  padding: 1rem;
 }
 .chart-container {
     flex: 1; /* Make each chart take up equal space */

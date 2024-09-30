@@ -4,6 +4,8 @@ import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import AddIncomeModal from '../../Modals/addIncome';
 import Sidebar from '../Sidebar/Sidebar';
 import './pages.css';
+import '../Chart/Chart.css'
+import '../card.css'
 import { Pie, Bar } from '@ant-design/charts';
 
 const IncomeScreen = () => {
@@ -162,20 +164,20 @@ const IncomeScreen = () => {
 
 
   return (
-    <div style={{border: '5px solid purple' , display:'flex', width:'100%'}}>
+    <div className='maindiv'>
             
     <Sidebar  />
      <div className='content' >
-     <Card title="Total Income"  >
+     <Card title="Total Income"  className='cards'>
         <p>Total Income: ${totalIncome}</p>
         <Progress percent={(totalIncome / targetIncome) * 100} />
-        <Button type="primary" onClick={showIncomeModal}>
+        <Button type="primary" onClick={showIncomeModal} className='btns'>
           Add Income
         </Button>
       </Card>
 
       {/* Charts */}
-      <div className='charts-wrapper'  >
+      <div className='charts-wrapper'>
         <div className='chart-container' >
           <h2>Your Analytics</h2>
           <Bar {...config} />

@@ -38,8 +38,8 @@ const BarChart = ({ sorted }) => {
     barStyle: {
       radius: [4, 4, 0, 0], // Rounded top corners
     },
-    width: 300,  // Set width for medium size
-    height: 300, // Set height for medium size
+    //width: 300,  // Set width for medium size
+    //height: 300, // Set height for medium size
   };
   
 
