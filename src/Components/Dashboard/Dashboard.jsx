@@ -163,7 +163,7 @@ return (
           handleIncomeCancel={handleIncome}
           onFinish={onFinish}
         />
-        <Tables transactions={transactions} />
+        <Tables transactions={transactions}    />
       </div>
     </div>
   );

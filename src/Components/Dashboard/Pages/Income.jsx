@@ -177,14 +177,15 @@ const IncomeScreen = () => {
           <Bar {...config} />
         </div>
 
-        <div  className='chart-container'>
+        <div  className='charti'>
 
           <h2>Your Income Distribution</h2>
           <Pie {...pieConfig} />
         </div>
       </div>
-      <Table scroll={{ x: 'max-content'}} columns={columns} dataSource={incomeData} />
-     
+      <div className="main-table">
+      <Table scroll={{ x: 'max-content'}} columns={columns} dataSource={incomeData}   pagination={false}  />
+      </div>
      </div>
 
       {/* Income Table */}

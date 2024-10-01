@@ -2,7 +2,7 @@ import React from 'react';
 import { Bar, Pie } from '@ant-design/charts';
 import PieChart from './PieChart';
 import './Chart.css'
-
+import '../Pages/pages.css'
 const BarChart = ({ sorted }) => {
   // Assume that `sorted` contains { date, amount, category } for each item
   const data = sorted.map((item) => {
@@ -74,7 +74,7 @@ const BarChart = ({ sorted }) => {
       />
       </div>
 
-      <div>
+      <div className='charti'>
       <h2>Your Spendings</h2>
       <PieChart sorted={sorted}  {...config} />
       </div>

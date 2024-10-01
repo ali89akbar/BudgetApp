@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Layout, Menu } from 'antd';
-import { UserOutlined, UploadOutlined, DollarOutlined, BankOutlined } from '@ant-design/icons';
+import { UserOutlined, UploadOutlined, DollarOutlined, BankOutlined,LogoutOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import "./sidebar.css";
 
@@ -55,18 +55,23 @@ const Sidebar = ({ onCollapseChange }) => {
       icon: <BankOutlined />,
       label: 'Savings',
     },
+    {
+      key: '5',
+      icon: <LogoutOutlined />,
+      label: 'Logout',
+    }
   ];
 
   return (
-    <Layout className='layout-container'>
+    <Layout style={{border:"3px solid green"}}>
       <Sider
         className='sidebar'
+        style={{border:"9px solid black"}}
         // width='50px'
-        collapsible
-        collapsed={collapsed}
-        onCollapse={handleCollapse}
+       collapsible
+       // collapsed={collapsed}
+       // onCollapse={handleCollapse}
       >
-        <div className="demo-logo-vertical" />
         <Menu
           theme="dark"
           mode="inline"

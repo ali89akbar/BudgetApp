@@ -1,6 +1,7 @@
 import { Table,Select,Radio } from 'antd'
 import { unparse } from 'papaparse';
 import React, { useState } from 'react'
+import './table.css';
 
 const Tables = ({transactions}) => {
     let {Option}= Select;
@@ -71,19 +72,10 @@ const Tables = ({transactions}) => {
   
   return (
     <div
-      style={{
-        width: "100%",
-        padding: "0rem 2rem",
-      }}
+      className='main-table'
     >
       <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          gap: "1rem",
-          alignItems: "center",
-          marginBottom: "1rem",
-        }}
+        className='table-div'
       >
         <div className="input-flex">
     <input
@@ -115,13 +107,7 @@ const Tables = ({transactions}) => {
     </div>
     <div className="my-table" >
         <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            width: "100%",
-            marginBottom: "1rem",
-          }}
+          className='child-table'
         >
           <h2>Transactions</h2>
     <Radio.Group
@@ -136,18 +122,13 @@ const Tables = ({transactions}) => {
 
          
           </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              gap: "1rem",
-              width: "300px",
-              marginBottom:'1rem'
-            }}
-          >
+          <div className='btn-div'>
             <button className="btns" onClick={exportToCsv}>
               Export to CSV
             </button>
+
+
+
             <label for="file-csv"
             style={{display:"flex", justifyContent:"center",color:"white", textAlign:"center" , alignItems:"center"}}
             className="btns">
@@ -163,7 +144,7 @@ const Tables = ({transactions}) => {
             />
           </div>
 
-    <Table  scroll={{ x: 'max-content' }}  dataSource={sorted} columns={column}/>
+    <Table  scroll={{ x: 'max-content' }}  dataSource={sorted} columns={column} pagination={false}/>
     
     
     </div>

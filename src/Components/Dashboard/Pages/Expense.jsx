@@ -174,13 +174,16 @@ const ExpenseScreen = () => {
           <Bar {...config} />
         </div>
 
-        <div>
+        <div className='charti'>
           <h2>Your Expense Distribution</h2>
           <Pie {...pieConfig} />
         </div>
       </div>
-      <Table scroll={{ x: 'max-content'}} columns={columns} dataSource={expenseData} style={contentStyle} />
-
+      <div className="main-table">
+      <div className="my-table" >
+      <Table scroll={{ x: 'max-content'}} columns={columns} dataSource={expenseData}   pagination={false}  />
+      </div>
+      </div>
       </div>
       {/* Expense Table */}
     

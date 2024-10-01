@@ -131,7 +131,7 @@ font-weight: 500;
     align-items: center;
     gap: 0.5rem;
     width: 100%;
-    box-shadow: 0px 0px 30px 8px rgba(227, 227, 227, 0.75);
+    /*box-shadow: 0px 0px 30px 8px rgba(227, 227, 227, 0.75);*/
     border-radius: 0.5rem;
     padding: 0rem 0.5rem;
   }
@@ -166,6 +166,7 @@ font-weight: 500;
   .select-input > div {
     border: 0px solid #fff !important;
   }
+
   
 
   
@@ -174,7 +175,7 @@ font-weight: 500;
   }
 
   .btns{
-    width: 400px;
+    width: 150px;
     background-color: #1890ff;
     display: inline;
     text-transform: none; 
@@ -199,25 +200,21 @@ font-weight: 500;
     }
 
 
-    .my-row {
-        display: flex; /* Use flexbox for layout */
-        flex-direction: column; /* Stack cards vertically */
-        align-items: center; /* Center cards horizontally */
-        width: 100%; /* Full width to center cards */
-        overflow: hidden; /* Prevent overflow */
-    }
+   
 
     .my-card {
         width: 100%; /* Full width minus margin */
         max-width: 100vh; /* Optional max width */
         margin: 10px 0; /* Vertical margin between cards */
         flex-shrink: 0; /* Prevent cards from shrinking */
-        position: relative; /* Position relative to the parent */
+        position: relative;
+        gap: 0.5rem;
        
     }
 
     .btns {
-        width: auto;
+      width: 100px;
+      height: 50px;
     }
 
     .custom-input {

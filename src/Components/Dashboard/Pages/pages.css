@@ -24,6 +24,7 @@
     flex: 1; /* Flex grow to take available space */
     border-radius: 8px; /* Rounded corners */
     background: white; /* Background color */
+    width: 50%;
   }
   
   .income-card {
@@ -61,9 +62,13 @@
 .maindiv {
     display: flex;
     width: 98%;
+    border: 5px solid purple;
   }
   
+.charti{ 
+  align-items: center;
 
+}
 
 
 @media (max-width: 768px) {

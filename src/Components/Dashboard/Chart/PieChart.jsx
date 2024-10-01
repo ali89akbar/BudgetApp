@@ -23,7 +23,10 @@ const PieChart = ({ sorted }) => {
     //height: 300, // Set height for medium size
   };
 
-  return <Pie {...configs} />;
+  return (
+  <Pie {...configs} />
+  );
+
 };
 
 export default PieChart;
