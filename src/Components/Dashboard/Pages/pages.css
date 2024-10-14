@@ -2,6 +2,7 @@
 .chart-containers {
     flex: 1; /* Make each chart take up equal space */
     margin-right: 1rem; /* Add some space between charts */
+
 }
 
 .chart-containers::after {
@@ -20,12 +21,35 @@
     gap: 20px; /* Spacing between charts */
   }
   
-  .chart-container {
-    flex: 1; /* Flex grow to take available space */
+  .charts-wrapper {
+    display: flex;
+    justify-content: space-between; /* Space between cards */
+    align-items: flex-start;
+    margin-top: 1rem; 
+    margin-bottom: 1rem;
+    width: 100%;
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    gap: 5px; /* Space between the cards */
+    box-sizing: border-box;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19);
+    border-radius: 0.5rem;
+    padding: 1rem;
+}
+
+.chart-container {
+    flex: 0 0 60%; /* Fixed to 60% of the width */
+    margin-right: 1rem; /* Optional: Space between charts */
     border-radius: 8px; /* Rounded corners */
     background: white; /* Background color */
-    width: 50%;
-  }
+}
+
+.charti {
+    flex: 0 0 30%; /* Fixed to 40% of the width */
+    border-radius: 8px; /* Rounded corners */
+    background: white; /* Background color */
+    text-align: center;
+}
+
   
   .income-card {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -45,8 +69,16 @@
   .cards{
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19);
     border-radius: 0.5rem;
-   
+    font-family: 'Montserrat', 'sans-serif' !important;
+    font-size: 20px;
   
+}
+.ant-layout{
+  display: flex;
+  flex: none;
+}
+.ant-card .ant-card-body{
+padding: 8px;
 }
 .tables{
     height: auto;
@@ -62,16 +94,17 @@
 .maindiv {
     display: flex;
     width: 98%;
-    border: 5px solid purple;
+    min-height: 100vh;
   }
   
-.charti{ 
-  align-items: center;
 
+.card-div{
+  display: flex;
+   justify-content: space-between;
+   align-items: center;
 }
 
-
-@media (max-width: 768px) {
+@media (max-width: 880px) {
     .charts-wrappers {
         flex-direction: column; /* Stack charts vertically */
         align-items: center; /* Center the charts horizontally */
@@ -90,6 +123,9 @@
       }
       .charts-wrappers {
         flex-direction: column;
+      }
+      .maindiv{
+        min-height: 140vh;
       }
     
       .chart-containers {

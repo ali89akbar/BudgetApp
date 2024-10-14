@@ -1,206 +1,122 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Button, Table, Space, message, Progress } from 'antd';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { Card, Button, Table, Space, message, Progress, Menu, Dropdown, Layout, Avatar } from 'antd';
+import { EditOutlined, DeleteOutlined,UserOutlined,MenuFoldOutlined,MenuUnfoldOutlined} from '@ant-design/icons';
 import AddIncomeModal from '../../Modals/addIncome';
 import AddExpenseModal from '../../Modals/addExpense'; // Import your expense modal
 import Sidebar from '../Sidebar/Sidebar';
 import './pages.css';
 import { Pie, Bar } from '@ant-design/charts';
+import { Header } from 'antd/es/layout/layout';
+import { useAuth } from '../../../context/AuthContext';
+import AddSavingModal from '../../Modals/addSavings';
+
 
 const TotalSavings = () => {
-  const [isIncomeModal, setIsIncomeModal] = useState(false);
-  const [isExpenseModal, setIsExpenseModal] = useState(false); // New state for expense modal
+  const [isSavingModal, setIsSavingModal] = useState(false);
   const [savingData, setsavingData] = useState([]);
-  const [incomeData, setIncomeData] = useState([]) // Income data
-  const [expenseData, setExpenseData] = useState([]); // Expense data
+  const [isEditMode,setIsEditMode]= useState(false);
+  const [selectedRecord,setSelectedRecord]= useState(null);
   const [collapsed, setCollapsed] = useState(false);
+  
+ const [name,setName]= useState("")
+ const {logout} = useAuth();
+ const {user}= useAuth();
+ console.log(user?.user?.name)
+ 
+ useEffect(()=>{
+   setName(user?.user?.name.toUpperCase())
+   fetchData()
+ },[name])
+
+
+ 
 
   // Dummy data for income
-  const dummyIncomeData = [
-    {
-      key: '1',
-      Name: 'Software Engineer',
-      amount: 5000,
-      tag: 'Job',
-      type: 'Salary',
-      date: '2024-09-20',
-    },
-    {
-      key: '2',
-      Name: 'Freelance Project',
-      amount: 2000,
-      tag: 'Freelancing',
-      type: 'Freelancing',
-      date: '2024-09-22',
-    },
-  ];
 
-  // Dummy data for expenses
-  const dummyExpenseData = [
-    {
-      key: '1',
-      Name: 'Rent',
-      amount: 1200,
-      tag: 'Housing',
-      type: 'Monthly',
-      date: '2024-09-01',
-    },
-    {
-      key: '2',
-      Name: 'Groceries',
-      amount: 300,
-      tag: 'Food',
-      type: 'Monthly',
-      date: '2024-09-15',
-    },
-  ];
-
-  useEffect(() => {
-    setIncomeData(dummyIncomeData);
-    setExpenseData(dummyExpenseData); // Initialize expense data
-  }, []);
-
-  const totalIncome = incomeData.reduce((sum, item) => sum + item.amount, 0);
-  const totalExpense = expenseData.reduce((sum, item) => sum + item.amount, 0);
+  const totalIncome = savingData.reduce((sum, item) => sum + item.amount, 0);
+  const totalExpense = savingData.reduce((sum, item) => sum + item.amount, 0);
   const totalSavings = totalIncome - totalExpense; // Calculate savings
   
   const targetIncome = 0; // Set your target income here
 
-  const pieDataIncome = incomeData.map(item => ({
-    type: item.tag,
-    value: item.amount,
-  }));
-
-  const pieDataExpense = expenseData.map(item => ({
-    type: item.tag,
-    value: item.amount,
-  }));
-
-  const data = incomeData.map((item) => ({
+  
+  const data = savingData.map((item) => ({
     date: item.date,
     amount: item.amount,
     category: item.type,
   }));
 
-  const config = {
-    data,
-    xField: 'date',
-    yField: 'amount',
-    seriesField: 'category',
-    colorField: 'category',
-    color: {
-      Income: '#36cfc9',
-      Expense: '#ff4d4f',
-    },
-    barWidthRatio: 0.5,
-    legend: true,
-    xAxis: {
-      label: {
-        formatter: (v) => v,
-      },
-    },
-    yAxis: {
-      label: {
-        formatter: (v) => `$${v}`,
-      },
-    },
-    barStyle: {
-      radius: [4, 4, 0, 0],
-    },
-    // width: 500,
-    // height: 300,
+const fetchData = async()=>{
+  const token = localStorage.getItem("token")
+  const response = await fetch("/api/saving/saving",{
+    method:"GET",
+    headers:{
+      token:`${token}`
+    }
+    
+  })
+  if(!response.ok){
+    console.log("Internal Error")
+  }
+  const data = await response.json();
+  setsavingData(data);
+}
+
+const handleUpdate = (record) => {
+  setIsEditMode(true);
+  setSelectedRecord(record);
+  setIsSavingModal(true); // Open the modal for editing
+};
+
+const showSavingModal = () => {
+  setIsEditMode(false);
+  setIsSavingModal(true);
+};
+
+const handleSavingCancel = () => {
+  setIsSavingModal(false);
+  setSelectedRecord(null); // Clear the selected record when closing the modal
+};
+
+const handleDelete = async(record) => {
+  const token = localStorage.getItem("token")
+  const response = await fetch(`/api/saving/saving/${record.id}`,{
+    method:"DELETE",
+    headers:{
+      token:`${token}`
+    }
+    
+  })
+  if(!response.ok){
+    console.log("Internal error in response of saving")
+  }
+  setsavingData(savingData.filter(item=> item.id !== record.id))
+  message.success("Saving deleted Successfully")
+
+};
+
+const onFinish = (values) => {
+  const newData = {
+    key: Date.now().toString(),
+    Name: values.name,
+    amount: values.amount,
+    tag: values.tag,
+    type: values.type,
+    date: values.date ? values.date.format('YYYY-MM-DD') : '2024-09-25',
   };
 
-  const pieConfigIncome = {
-    data: pieDataIncome,
-    angleField: 'value',
-    colorField: 'type',
-    radius: 0.8,
-    label: {
-      type: 'inner',
-      offset: '-30%',
-      content: '{value}',
-      style: {
-        fontSize: 14,
-        textAlign: 'center',
-      },
-    },
-    width:200,
-    height:200,
-    interactions: [{ type: 'element-selected' }, { type: 'element-active' }],
-  };
+  setExpenseData([...expenseData, newData]);
+  message.success('Expense added successfully');
+  setIsExpenseModal(false);
+};
 
-  const pieConfigExpense = {
-    data: pieDataExpense,
-    angleField: 'value',
-    colorField: 'type',
-    radius: 0.8,
-    label: {
-      type: 'inner',
-      offset: '-30%',
-      content: '{value}',
-      style: {
-        fontSize: 14,
-        textAlign: 'center',
-      },
-    },
-    width:200,
-    height: 200,
-    interactions: [{ type: 'element-selected' }, { type: 'element-active' }],
-  };
-
-  const showIncomeModal = () => {
-    setIsIncomeModal(true);
-  };
-
-  const showExpenseModal = () => {
-    setIsExpenseModal(true); // Open expense modal
-  };
-
-  const handleIncomeCancel = () => {
-    setIsIncomeModal(false);
-  };
-
-  const handleExpenseCancel = () => {
-    setIsExpenseModal(false); // Close expense modal
-  };
-
-  const onIncomeFinish = (values) => {
-    const newData = {
-      key: Date.now().toString(),
-      Name: values.name,
-      amount: values.amount,
-      tag: values.tag,
-      type: values.type,
-      date: values.date ? values.date.format('YYYY-MM-DD') : '2024-09-25',
-    };
-
-    setsavingData([...savingData, newData]);
-    message.success('Income added successfully');
-    setIsIncomeModal(false);
-  };
-
-  const onExpenseFinish = (values) => {
-    const newData = {
-      key: Date.now().toString(),
-      Name: values.name,
-      amount: values.amount,
-      tag: values.tag,
-      type: values.type,
-      date: values.date ? values.date.format('YYYY-MM-DD') : '2024-09-25',
-    };
-
-    setExpenseData([...expenseData, newData]); // Add new entry to expense data
-    message.success('Expense added successfully');
-    setIsExpenseModal(false); // Close modal after adding expense
-  };
 
   const columns = [
-    { title: 'Name', dataIndex: 'Name', key: 'Name' },
+    {title:"No",dataIndex:"id",key:"id"},
+    { title: 'Name', dataIndex: 'tag', key: 'tag' },
     { title: 'Amount', dataIndex: 'amount', key: 'amount' },
-    { title: 'Tag', dataIndex: 'tag', key: 'tag' },
     { title: 'Type', dataIndex: 'type', key: 'type' },
-    { title: 'Date', dataIndex: 'date', key: 'date' },
+    { title: 'Date', dataIndex: 'transaction_date', key: 'transaction_date' },
     {
       title: 'Action',
       key: 'action',
@@ -213,29 +129,43 @@ const TotalSavings = () => {
     },
   ];
 
-  const handleUpdate = (record) => {
-    message.info('Update clicked for ' + record.Name);
-  };
 
-  const handleDelete = (record) => {
-    setsavingData(savingData.filter(item => item.key !== record.key));
-    message.success('Income deleted successfully');
-  };
 
-  const handleCollapseChange = (value) => {
-    setCollapsed(value);
-  };
+  const menu = (
+    <Menu>
+      <Menu.Item key="1" onClick={() => console.log('Edit Profile clicked')}>Edit Profile</Menu.Item>
+      <Menu.Item key="2" onClick={() => logout()}>Logout</Menu.Item>
+    </Menu>
+  );
 
-  const contentStyle = {
-    marginLeft: collapsed ? '30px' : '50px',
-    transition: 'margin-left 0.3s ease',
-  };
+ const toggleSidebar=()=>{
+  setCollapsed(!collapsed)
+ }
+
+ 
 
   return (
     <div className='maindiv'>
-      <Sidebar  />
+      <Sidebar collapsed={collapsed} onCollapseChange={toggleSidebar}  />
       <div className='content'>
-      <Card title="Total Income" className='cards'n>
+      <Layout>
+      <Header
+        className='header-div'
+      >
+        <Button
+          type="text"
+          icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+          onClick={toggleSidebar}
+        />
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <span style={{ marginRight: '10px' }}>{name}</span>
+          <Dropdown overlay={menu}>
+            <Avatar style={{ cursor: 'pointer' }} icon={<UserOutlined />} />
+          </Dropdown>
+        </div>
+      </Header>
+    </Layout>
+     {/* <Card title="Total Income" className='cards'n>
         <p>Total Income: ${totalIncome}</p>
         <p>Total Expense: ${totalExpense}</p>
         <p>Total Savings: ${totalSavings}</p>
@@ -247,7 +177,15 @@ const TotalSavings = () => {
           Add Expense
         </Button>
       </Card>
-
+*/}
+   <Card className='cards'>
+    <div className='card-div'>
+        <h2>Total Savings</h2>
+        <Button type="primary" onClick={showSavingModal} className='btns'>
+            Add Savings
+        </Button>
+    </div>
+</Card>
       {/* Charts 
       <div className='charts-wrapper' >
         <div className='chart-container'>
@@ -267,24 +205,31 @@ const TotalSavings = () => {
 
 
       {/* Income Table */}
-      <div className="main-table">
+      <div  style={{
+        width: "100%",
+        padding: "0rem 2rem",
+        boxShadow: " 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19)",
+        backgroundColor:"white",
+        borderRadius:"0.5rem",
+        marginTop:"1rem"
+      }}>
         
-      <Table scroll={{ x: 'max-content'}} columns={columns} dataSource={incomeData}   pagination={false}  />
+      <Table scroll={{ x: 'max-content'}} columns={columns} dataSource={savingData}   pagination={false}  />
       </div>
       
       {/* Income Modal */}
-      <AddIncomeModal
-        isIncomeModalVisible={isIncomeModal}
-        handleIncomeCancel={handleIncomeCancel}
-        onFinish={onIncomeFinish}
+      <AddSavingModal
+        isSavingModalVisible={isSavingModal}
+        handleSavingCancel={handleSavingCancel}
+        onFinish={onFinish}
+        savingData={savingData}
+        setsavingData={setsavingData}
+        isEditMode={isEditMode}
+        selectedRecord={selectedRecord}
+        fetchData= {fetchData}
       />
       
-      {/* Expense Modal */}
-      <AddExpenseModal
-        isExpenseModalVisible={isExpenseModal}
-        handleExpenseCancel={handleExpenseCancel}
-        onFinish={onExpenseFinish}
-      />
+    
     </div>
     </div>
   );

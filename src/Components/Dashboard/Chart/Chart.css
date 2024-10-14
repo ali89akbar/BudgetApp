@@ -13,8 +13,9 @@
   padding: 1rem;
 }
 .chart-container {
-    flex: 1; /* Make each chart take up equal space */
-    margin-right: 1rem; /* Add some space between charts */
+ /* Make each chart take up equal space */
+    margin-right: 1rem;
+    
 }
 
 .chart-container:last-child {

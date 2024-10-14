@@ -12,25 +12,34 @@ import Income from './Components/Dashboard/Pages/Income.jsx'
 import ExpenseScreen from './Components/Dashboard/Pages/Expense.jsx'
 import TotalSavings from './Components/Dashboard/Pages/TotalSavings.jsx'
 import Forget from './Components/Login/SignUp/Forget.jsx'
+import ProtectedRoute from './Components/PrivateRoutes/PrivateRoutes.jsx'
+import Test from './Components/Test.jsx';
+import { AuthProvider } from './context/AuthContext.jsx'
 
-const router= createBrowserRouter(
+
+{/*const router= createBrowserRouter(
   createRoutesFromElements(
     <>
-    <Route path="/" element={<Login />} />
+    <Route path="/" element={<AuthProvider><Login /></AuthProvider>} />
+
     <Route path="/signup" element={<SignInForm />} />
+
+
+    <Route element= {<AuthProvider><ProtectedRoute/></AuthProvider>}>
     <Route path='/dashboard' element={<Dashboard/>}/>
     <Route path='/chart' element={<PieChart/>}/>
     <Route path='/income' element={<Income/>}/>
     <Route path='/expense' element={<ExpenseScreen/>}/>
     <Route path='/savings' element={<TotalSavings/>}/>
     <Route path='/forget' element={<Forget/>}/>
+    </Route>
     </>
   )
 )
-
+*/}
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-   <RouterProvider router={router}></RouterProvider>
+<App/>
   </StrictMode>,
 )

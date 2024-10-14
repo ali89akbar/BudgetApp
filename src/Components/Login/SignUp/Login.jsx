@@ -2,24 +2,33 @@ import React, { useState, useEffect } from "react";
 import "./styles.css";
 import SignInForm from "./SignIn";
 import SignUpForm from "./SignUp";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+
 
 export default function Login() {
 
   const [type, setType] = useState("signIn");
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [isMobile, setIsMobile] = useState(windowWidth <= 768);
+  
+
 
   useEffect(() => {
     const handleResize = () => {
+      setWindowWidth(window.innerWidth);
       setIsMobile(window.innerWidth <= 768);
     };
-
+  
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const handleOnClick = (text) => {
     setType(text);
+    
+    
   };
+ 
 
   const containerClass =
     "container " + (type === "signUp" ? "right-panel-active" : "");
@@ -27,39 +36,45 @@ export default function Login() {
   return (
     <div className="App">
       <div className={containerClass} id="container">
-        {type === "signIn" && (
-          <>
-            <SignInForm />
-            {isMobile && (
-              <div className="mobile-buttons">
-                <p>Don't have an account?</p>
-                <button
-                  className="ghost mobile-button"
-                  onClick={() => handleOnClick("signUp")}
-                >
-                  Sign Up
-                </button>
-              </div>
-            )}
-          </>
-        )}
+      {type === "signIn" && (
+  <>
+    <SignInForm type={type} setType={setType} isMobile={isMobile} setIsMobile={setIsMobile}/>
+   {/* {isMobile && (
+      <div className="mobile-buttons" style={{  zIndex: 1000 }}>
+        <div>
+          <p>Don't have an account?</p>
+          <button
+            className="btns"
+            onClick={() => handleOnClick("signUp")}
+          >
+            Sign Up
+          </button>
+        </div>
+      </div> 
+   )} } */}
 
-        {type === "signUp" && (
-          <>
-            <SignUpForm />
-            {isMobile && (
-              <div className="mobile-buttons">
-                <p>Already have an account?</p>
-                <button
-                  className="ghost mobile-button"
-                  onClick={() => handleOnClick("signIn")}
-                >
-                  Sign In
-                </button>
-              </div>
-            )}
-          </>
-        )}
+  </>
+)}
+
+{type === "signUp" && (
+  <>
+    <SignUpForm type={type} setType={setType}  isMobile={isMobile} setIsMobile={setIsMobile} />
+
+   {/* {isMobile && (
+      <div className="mobile-buttons">
+        <div>
+          <p>Already have an account?</p>
+          <button
+            className="btns"
+            onClick={() => handleOnClick("signIn")}
+          >
+            Sign In
+          </button>
+        </div>
+      </div>
+    )} */}
+  </>
+)}
 
         {/* Overlay container for non-mobile views */}
         {!isMobile && (
@@ -71,7 +86,7 @@ export default function Login() {
                   To keep connected with us please login with your personal info
                 </p>
                 <button
-                  className="ghost"
+                  className="btns"
                   id="signIn"
                   onClick={() => handleOnClick("signIn")}
                 >
@@ -82,7 +97,8 @@ export default function Login() {
               <div className="overlay-panel overlay-right">
                 <h1>
 Get Started</h1>
-                <p>Take control of your finances, one step at a time.Enter your personal details and start your journey with Budget Tracker App</p>                <button
+                <p>Take control of your finances, one step at a time.Enter your personal details and start your journey with Budget Tracker App</p>                
+                <button
                   className="ghost"
                   id="signUp"
                   onClick={() => handleOnClick("signUp")}

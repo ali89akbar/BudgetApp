@@ -2,33 +2,33 @@ import React, { useEffect } from "react";
 import { Button, Modal, Form, Input, DatePicker, Select, message } from "antd";
 import '../Dashboard/card.css'; // Make sure to update this with the new styles
 
-function AddIncomeModal({
-  isIncomeModalVisible,
-  handleIncomeCancel,
-  incomeData,
-  setIncomeData,
+function AddSavingModal({
+  isSavingModalVisible,
+  handleSavingCancel,
+  savingData,
+  setsavingData,
   selectedRecord,
-  isEditMode,
   fetchData,
+  isEditMode,
 }) {
 
 
   const [form] = Form.useForm();
 
   useEffect(() => {
-    if (isIncomeModalVisible && selectedRecord) {
+    if (isSavingModalVisible && selectedRecord) {
       form.setFieldsValue({
         name: selectedRecord.tag,
         amount: selectedRecord.amount,
         transaction_date: selectedRecord.transaction_date,
       });
     }
-  }, [isIncomeModalVisible, selectedRecord]);
+  }, [isSavingModalVisible, selectedRecord]);
 
   const handleAdd = async(values)=>{
     const token = localStorage.getItem("token")
    try{
-    const response = await fetch("/api/income/adds",{
+    const response = await fetch("/api/saving/saving",{
       method:"POST",
       headers:{
         "Content-Type":"application/json",
@@ -38,26 +38,26 @@ function AddIncomeModal({
         amount: values.amount,
           tag: values.name,
           transaction_date: values.date,
-          type: 'Income',
+          type: 'Saving',
       })
     });
 
     if(!response.ok){
       console.log("Error in response")
     }
-  
-    message.success("Income added Successfuly")
+    
+    message.success("Saving added Successfuly")
     fetchData()
   }
   catch(error){
-    console.log("Error while adding Income",error);
+    console.log("Error while adding Saving",error);
   }
   }
 
   const handleUpdate = async(values)=>{
     const token = localStorage.getItem("token")
     try{
-      const response = await fetch(`/api/income/updates/${selectedRecord.id}`,{
+      const response = await fetch(`/api/saving/saving/${selectedRecord.id}`,{
         method:"PUT",
         headers:{
           "Content-Type":"application/json",
@@ -72,11 +72,9 @@ function AddIncomeModal({
       if(!response.ok){
         console.log("Error in response")
       }
-     
-      message.success("Income updated Successfuly")
+      message.success("Updated Saving Successfully")
       fetchData()
-     
-    }
+ }
     catch(error){
       console.log("Error While Updating Income",error)
     }
@@ -90,15 +88,15 @@ function AddIncomeModal({
       await handleAdd(values);
     }
     form.resetFields();
-    handleIncomeCancel();
+    handleSavingCancel();
   }
 
 
   return (
     <Modal
-      title={isEditMode? "Update Income" :"Add Income"}
-      open={isIncomeModalVisible}
-      onCancel={handleIncomeCancel}
+      title={isEditMode? "Update Saving" :"Add Saving"}
+      open={isSavingModalVisible}
+      onCancel={handleSavingCancel}
       footer={null}
       
     >
@@ -160,7 +158,7 @@ function AddIncomeModal({
 
         <Form.Item>
           <Button className="btn full-width-input" type="primary" htmlType="submit">
-          {isEditMode? "Update Income": "Add Income"}
+          {isEditMode? "Update Saving": "Add Saving"}
           </Button>
         </Form.Item>
       </Form>
@@ -168,4 +166,4 @@ function AddIncomeModal({
   );
 }
 
-export default AddIncomeModal;
+export default AddSavingModal;

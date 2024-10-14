@@ -1,5 +1,4 @@
 .main-table{
-   border: 1px solid black;
     padding: 0rem 2rem;
     box-shadow:  0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19);
     background-color:"white";
@@ -33,9 +32,3 @@
 
 
 
-@media (min-width: 768){
-    .child-table{
-        flex-direction: row;
-    }
-   
-}

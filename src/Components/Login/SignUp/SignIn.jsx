@@ -1,138 +1,201 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import './styles.css'; // For custom styling
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { useAuth } from "../../../context/AuthContext";
+import { Input, Form, Button, message } from "antd";
+import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 
-function SignInForm() {
-  const [user,setUser]= useState({});
+function SignInForm({ type, setType, isMobile, setIsMobile }) {
+  const { login } = useAuth();
+  const [emailError, setEmailError] = useState(null);
+  const [passwordError, setPasswordError] = useState(null);
+  const [users, setUser] = useState({});
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || '/';
 
-  function handlecallbackResponse(response){
-    console.log("Callback response received",response.credential);
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const userObject = jwtDecode(token);
+      setUser(userObject);
+      console.log("Sign In Users", userObject);
+    }
+  }, []);
+
+  function handlecallbackResponse(response) {
+    console.log("Callback response received", response.credential);
     let userObject = jwtDecode(response.credential);
-    console.log(userObject);
     setUser(userObject);
+    localStorage.setItem("token", response.credential);
     document.getElementById("google-signin").hidden = true;
+
+    fetch('/api/auth/google-login', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ token: response.credential })
+    }).then(res => res.json())
+      .then(data => {
+        if (data.token) {
+          localStorage.setItem("token", data.token);
+          console.log(jwtDecode(data.token));
+          login(data.token);
+        } else {
+          console.error("Google Login Error");
+          alert("Google Login Error");
+        }
+      });
   }
 
-
-  useEffect(()=>{
+  useEffect(() => {
     google.accounts.id.initialize({
       client_id: "181931549693-ajeorkb5hvhacecr2fui08c006pmgvba.apps.googleusercontent.com",
       callback: handlecallbackResponse
-    })
+    });
     google.accounts.id.renderButton(
       document.getElementById("google-signin"),
       {
-       // type: "sign-in",
-       // scope: "https://www.googleapis.com/auth/userinfo.email",
-        //width: 240,
-        //height: 50,
-        //longtitle: true,
         theme: "outline",
-        size:"large"
-        //onsuccess: handlecallbackResponse
+        size: "large"
       }
-    )
+    );
     google.accounts.id.prompt();
-  },[])
+  }, []);
 
+  function handleSignOut(e) {
+    setUser({});
+    document.getElementById("google-signin").hidden = false;
+    localStorage.removeItem('token');
+  }
 
-function handleSignOut(e){
-  setUser({})
-  document.getElementById("google-signin").hidden=false
+  const [form] = Form.useForm();
 
-}
-  const [mode, setMode] = useState("");
-  const [type, setType] = useState("signIn");
-  const [showSignInForm, setShowSignInForm] = useState(false);
+  const handleOnSubmit = async (values) => {
+    const { email, password } = values;
 
-  const handleClick = () => {
-    setShowSignInForm(true); // Change the state when the button is clicked
-  };
-  const [state, setState] = React.useState({
-    email: "",
-    password: ""
-  });
-
-  const handleChange = (evt) => {
-    const value = evt.target.value;
-    setState({
-      ...state,
-      [evt.target.name]: value
-    });
-  };
-
-  const handleOnSubmit = (evt) => {
-    evt.preventDefault();
-
-    const { email, password } = state;
-    alert(`You are logging in with email: ${email} and password: ${password}`);
-
-    for (const key in state) {
-      setState({
-        ...state,
-        [key]: ""
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email, password })
       });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        setError(errorData.message);
+        return;
+      }
+
+      const data = await response.json();
+      const token = data.token;
+      login(token);
+      setError(null);
+      message.success("Login successful!");
+    } catch (error) {
+      setError("Error");
+      console.error(error);
+      message.error("An error occurred during login.");
     }
   };
 
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  const handleOnClick = (text) => {
+    setType(text);
+  };
+  const onFinishFailed = (errorInfo) => {
+    console.log('Failed:', errorInfo);
+  };
   return (
     <div className="form-container sign-in-container">
-      <form onSubmit={handleOnSubmit}>
+      <Form
+        form={form}
+        onFinish={handleOnSubmit}
+        onFinishFailed={onFinishFailed}
+        initialValues={{
+          email: "",
+          password: ""
+        }}
+      >
         <h1 className="heading">Sign in</h1>
-        
-        <span>or use your account</span>
-        <input
-          type="email"
-          placeholder="Email"
-          name="email"
-          value={state.email}
-          onChange={handleChange}
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={state.password}
-          onChange={handleChange}
-        />
-        <Link to="/forget">Forgot your password?</Link>
-        
-        <button>Sign In</button>
-        <div className="account-text"
-        >  
-         <button
-                  className="ghos"
-                  id="signIn"
-                 onClick={handleClick}
-                >Sign In</button>
-                {showSignInForm && <SignInForm />} {/* Conditionally render the form */}
-                </div>
+        {error && <p className="error-message">{error}</p>}
 
-        {/* Separator with OR */}
+        <Form.Item
+          name="email"
+          rules={[
+            { required: true, message: "Please input your email!" },
+            { type: "email", message: "Invalid email format!" }
+          ]}
+        >
+          <Input
+            className="custom-password-input"
+            placeholder="Email"
+            type="email"
+          />
+        </Form.Item>
+
+        <Form.Item
+
+          name="password"
+          rules={[
+            { required: true, message: "Please input your password!" },
+            { min: 6, message: "Password must be at least 6 characters long!" }
+          ]}
+        >
+          <Input.Password
+            className="custom-password-input"
+            placeholder="Password"
+            iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+          />
+        </Form.Item>
+
+        <Link to="/forget">Forgot your password?</Link>
+
+        <Form.Item>
+          <Button type="primary" htmlType="submit" className="btns">
+            Sign In
+          </Button>
+        </Form.Item>
+
+        {type === "signIn" && isMobile && (
+          <div className="account-text" style={{ display: "flex", gap: "5px" }}>
+            <p>Don't have an account?</p>
+            <Button className="btns" style={{color:"white"}} type="link" onClick={() => handleOnClick("signUp")}>
+              Sign Up
+            </Button>
+          </div>
+        )}
+
         <div className="separator">
           <hr className="line" />
           <span className="or-text">OR</span>
           <hr className="line" />
         </div>
 
-        {/* Google Sign-In Button */}
-        <div id="google-signin">
-       
-</div>
-{
-            Object.keys(user).length !=0  &&
-            <button onClick={(e)=> handleSignOut(e)}>Signout</button>
+        <div id="google-signin"></div>
 
-          }
-  {user && 
-  <div>
-    {console.log(user.name)}
-    <img src={user.picture} alt="" />
-    <h3>{user.name}</h3>
-    </div>}
+        {Object.keys(users).length !== 0 && (
+          <Button type="default" onClick={handleSignOut} className="btns">
+            Sign Out
+          </Button>
+        )}
 
-      </form>
+        {users && (
+          <div>
+            <img src={users.picture} alt="" />
+            <h3>{users.name}</h3>
+          </div>
+        )}
+      </Form>
     </div>
   );
 }

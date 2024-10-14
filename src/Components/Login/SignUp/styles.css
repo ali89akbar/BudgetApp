@@ -91,7 +91,7 @@
     padding: 12px 15px;
     margin: 8px 0;
     width: 100%;
-    border-radius: 15px;
+    border-radius: 5px;
     height: 45px;
     transition: background-color 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
 }
@@ -105,6 +105,36 @@ input:focus {
 
 input:hover {
     background-color: #f0f0f0;
+}
+
+.custom-password-input {
+  background-color: #eee !important;
+  border: none !important;
+  color: black !important;
+  padding: 0px 15px !important;
+  margin: 8px 0 !important;
+  width: 90vh !important;
+  border-radius: 5px !important;
+  height: 45px !important;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, border 0.3s ease !important;
+}
+
+.custom-password-input:focus-within {
+  background-color: #fff !important;
+  border: 2px solid #00d2ff !important; /* Focus border color */
+  outline: none !important;
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.4)  !important; /* Subtle shadow on focus */
+
+}
+
+.custom-password-input.ant-input:hover {
+  background-color: #f0f0f0;
+
+}
+
+.ant-form-item-has-error .ant-input,
+.ant-form-item-has-error .ant-input-password {
+  border-color: red !important; /* Use !important to ensure it overrides */
 }
 
 
@@ -432,17 +462,31 @@ a:hover {
   width: auto;
   cursor: pointer;
 }
+.error-message{
+  color: red;
+  margin-top: 0px;
+  margin-bottom: 2px;
+}
+.input-error {
+  border: 1px solid #FF0000;
+  outline: none;
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.4); /* Subtle shadow on focus */
+
+}
 
 .forgot-password-container button[type='submit']:hover {
   background-color:  #00d2ff;
 }
 /* For tablets (screens 1024px and below) */
 @media (max-width: 1024px) {
+  .custom-password-input{
+    width: 60vh !important;
+  }
   .account-text {
-    display: initial;
+    display: none;
   }
   .container {
-      width: 95vw;  /* Increase width to 95% of viewport */
+      width: 100vw;  /* Increase width to 95% of viewport */
   }
 
   button {
@@ -460,6 +504,12 @@ a:hover {
 
 
 @media (max-width: 768px) {
+  .mobile-buttons{
+    display: initial;
+  }
+  .custom-password-input{
+    width: 80vh !important;
+  }
   .forgot-password-container {
   align-items: center;
   justify-content: center;

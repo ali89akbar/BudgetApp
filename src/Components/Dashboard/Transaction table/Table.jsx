@@ -1,7 +1,6 @@
 import { Table,Select,Radio } from 'antd'
 import { unparse } from 'papaparse';
 import React, { useState } from 'react'
-import './table.css';
 
 const Tables = ({transactions}) => {
     let {Option}= Select;
@@ -72,10 +71,22 @@ const Tables = ({transactions}) => {
   
   return (
     <div
-      className='main-table'
+      style={{
+        width: "100%",
+        padding: "0rem 2rem",
+        boxShadow: " 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19)",
+        backgroundColor:"white",
+        borderRadius:"0.5rem"
+      }}
     >
       <div
-        className='table-div'
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          gap: "1rem",
+          alignItems: "center",
+          marginBottom: "1rem",
+        }}
       >
         <div className="input-flex">
     <input
@@ -107,7 +118,12 @@ const Tables = ({transactions}) => {
     </div>
     <div className="my-table" >
         <div
-          className='child-table'
+          style={{
+           
+            alignItems: "center",
+            width: "100%",
+            marginBottom: "1rem",
+          }}
         >
           <h2>Transactions</h2>
     <Radio.Group
@@ -115,25 +131,32 @@ const Tables = ({transactions}) => {
             onChange={(e) => setSortKey(e.target.value)}
             value={sortKey}
           >
-            <Radio.Button value="">No Sort</Radio.Button>
             <Radio.Button value="date">Sort by Date</Radio.Button>
             <Radio.Button value="amount">Sort by Amount</Radio.Button>
           </Radio.Group>
 
          
           </div>
-          <div className='btn-div'>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-start",
+              gap: "1rem",
+              width: "100%",
+              marginBottom:'1rem'
+            }}
+          >
             <button className="btns" onClick={exportToCsv}>
               Export to CSV
             </button>
 
 
 
-            <label for="file-csv"
+            {/*<label for="file-csv"
             style={{display:"flex", justifyContent:"center",color:"white", textAlign:"center" , alignItems:"center"}}
             className="btns">
               Import from CSV
-            </label>
+            </label>*/}
             <input
               onChange={importFromCsv}
               id="file-csv"
@@ -144,7 +167,7 @@ const Tables = ({transactions}) => {
             />
           </div>
 
-    <Table  scroll={{ x: 'max-content' }}  dataSource={sorted} columns={column} pagination={false}/>
+    <Table  scroll={{ x: 'max-content' }}  pagination={true} dataSource={sorted} columns={column}/>
     
     
     </div>

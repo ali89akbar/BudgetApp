@@ -1,47 +1,112 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Button, Table, Space, message, Progress } from 'antd';
+import { Card, Button, Table, Space, message, Progress, Menu, Layout, Dropdown,Avatar } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
+import { MenuUnfoldOutlined, MenuFoldOutlined,DownOutlined } from '@ant-design/icons';
 import AddExpenseModal from '../../Modals/addExpense';
 import Sidebar from '../Sidebar/Sidebar';
 import './pages.css';
 import { Pie, Bar } from '@ant-design/charts';
+import Item from 'antd/es/list/Item';
+import { Header } from 'antd/es/layout/layout';
+import { useAuth } from '../../../context/AuthContext';
 
 const ExpenseScreen = () => {
   const [isExpenseModal, setIsExpenseModal] = useState(false);
   const [expenseData, setExpenseData] = useState([]);
   const [collapsed, setCollapsed] = useState(false);
+  const [isEditMode,setIsEditMode]= useState(false);
+  const [selectedRecord,setSelectedRecord]= useState(null);
+  const [name, setName] = useState("")
+  const {logout} = useAuth();
+  const {user}= useAuth();
+  console.log(user?.user?.name)
 
-  // Dummy data for expenses
-  const dummyData = [
-    {
-      key: '1',
-      Name: 'Rent',
-      amount: 1200,
-      tag: 'Housing',
-      type: 'Monthly',
-      date: '2024-09-01',
-    },
-    {
-      key: '2',
-      Name: 'Groceries',
-      amount: 300,
-      tag: 'Food',
-      type: 'Monthly',
-      date: '2024-09-15',
-    },
-  ];
+const fetchData= async ()=>{
+  const token = localStorage.getItem('token');
+  const response = await fetch('/api/expense/expense',{
+    method:'GET',
+    headers:{
+      token:`${token}`
+    }
+  })
+  if(!response.ok){
+     console.log("Error while Fetching");
+    
+  }
 
-  useEffect(() => {
-    setExpenseData(dummyData);
-  }, []);
+  const data = await response.json();
+  console.log(data)
+  setExpenseData(data)
+}
+
+  useEffect(()=>{
+    setName(user?.user?.name.toUpperCase())
+    fetchData()
+  },[name])
 
   const totalExpense = expenseData.reduce((sum, item) => sum + item.amount, 0);
   const targetExpense = 5000; // Set your target expense here
 
-  const pieData = expenseData.map(item => ({
-    type: item.tag,
-    value: item.amount,
-  }));
+  const handleDelete=async(record)=>{
+    const token = localStorage.getItem('token');
+    try{
+    const response = await fetch(`/api/expense/expense/${record.id}`,{
+      method:'DELETE',
+      headers:{
+        token:`${token}`
+      }
+    })
+    if(!response.ok){
+      console.log("Error while deleting");
+    }
+    setExpenseData(expenseData.filter(item=> item.id !== record.id))
+    message.success("Expense Deleted Successfully")
+  }catch(error){
+    console.error("Error:", error);
+    message.error("Error while deleting expense")
+  }
+    
+  }
+ 
+
+  {/*const handleUpdate = async(record) => {
+    setIsExpenseModal(true);
+    setIsEditMode(true)
+    setSelectedRecord(record)
+    const token = localStorage.getItem("token");
+    try{
+    const response = await fetch(`api/expense/expense/${record.id}`,{
+      method: "PUT",
+      headers:{
+        'Content-Type': 'application/json',
+        token:`${token}`
+      },
+      body: JSON.stringify({
+        amount: record.amount,
+        type: "Expense",
+        tag: record.tag,
+        transaction_date: record.date
+      }),
+    })
+    if(!response.ok){
+      console.log("Error while updating");
+    }
+    const data = await response.json();
+    setExpenseData(expenseData.map(item => item.id === data.id ? data : item))
+    message.success("Expense Updated successfully")
+    setIsEditMode(false)
+    setIsExpenseModal(false)
+
+  }
+  catch(error){
+    console.error("Error:", error);
+    message.error("Error while updating expense")
+  }
+  
+  };
+*/}
+
 
   const data = expenseData.map((item) => ({
     date: item.date,
@@ -49,58 +114,22 @@ const ExpenseScreen = () => {
     category: item.type,
   }));
 
-  const config = {
-    data,
-    xField: 'date',
-    yField: 'amount',
-    seriesField: 'category',
-    colorField: 'category',
-    color: {
-      Monthly: '#36cfc9',
-      OneTime: '#ff4d4f',
-    },
-    barWidthRatio: 0.5,
-    legend: true,
-    xAxis: {
-      label: {
-        formatter: (v) => v,
-      },
-    },
-    yAxis: {
-      label: {
-        formatter: (v) => `$${v}`,
-      },
-    },
-    barStyle: {
-      radius: [4, 4, 0, 0],
-    },
-    // width:500,
-    // height: 300,
-  };
+ 
 
-  const pieConfig = {
-    data: pieData,
-    angleField: 'value',
-    colorField: 'type',
-    radius: 0.8,
-    label: {
-      type: 'inner',
-      offset: '-30%',
-      content: '{value}',
-      style: {
-        fontSize: 14,
-        textAlign: 'center',
-      },
-    },
-    interactions: [{ type: 'element-selected' }, { type: 'element-active' }],
+  const handleUpdate = (record) => {
+    setIsEditMode(true);
+    setSelectedRecord(record);
+    setIsExpenseModal(true); // Open the modal for editing
   };
 
   const showExpenseModal = () => {
+    setIsEditMode(false);
     setIsExpenseModal(true);
   };
 
   const handleExpenseCancel = () => {
     setIsExpenseModal(false);
+    setSelectedRecord(null); // Clear the selected record when closing the modal
   };
 
   const onFinish = (values) => {
@@ -119,11 +148,11 @@ const ExpenseScreen = () => {
   };
 
   const columns = [
-    { title: 'Name', dataIndex: 'Name', key: 'Name' },
+    {title:'No',dataIndex:'id',key:'id'},
+    { title: 'Name', dataIndex: 'tag', key: 'tag' },
     { title: 'Amount', dataIndex: 'amount', key: 'amount' },
-    { title: 'Tag', dataIndex: 'tag', key: 'tag' },
     { title: 'Type', dataIndex: 'type', key: 'type' },
-    { title: 'Date', dataIndex: 'date', key: 'date' },
+    { title: 'Date', dataIndex: 'transaction_date', key: 'date' },
     {
       title: 'Action',
       key: 'action',
@@ -135,39 +164,48 @@ const ExpenseScreen = () => {
       ),
     },
   ];
+  const menu = (
+    <Menu>
+      <Menu.Item key="1" onClick={() => console.log('Edit Profile clicked')}>Edit Profile</Menu.Item>
+      <Menu.Item key="2" onClick={() => logout()}>Logout</Menu.Item>
+    </Menu>
+  );
 
-  const handleUpdate = (record) => {
-    message.info('Update clicked for ' + record.Name);
-  };
-
-  const handleDelete = (record) => {
-    setExpenseData(expenseData.filter(item => item.key !== record.key));
-    message.success('Expense deleted successfully');
-  };
-
-  const handleCollapseChange = (value) => {
-    setCollapsed(value);
-  };
-
-  const contentStyle = {
-    marginLeft: collapsed ? '30px' : '50px', // Adjust margin based on sidebar's width
-    transition: 'margin-left 0.3s ease',
+  const toggleSidebar = () => {
+    setCollapsed(!collapsed);  // Toggle the collapsed state
   };
 
   return (
+    
     <div className='maindiv'>
-      <Sidebar  onCollapseChange={handleCollapseChange}  />
+      <Sidebar collapsed={collapsed} onCollapseChange={toggleSidebar}  />
       <div className='content'>
-        
-      <Card title="Total Expense"  className='cards'>
-        <p>Total Expense: ${totalExpense}</p>
-        <Progress percent={targetExpense > 0 ? (totalExpense / targetExpense) * 100 : 0} />
+        <Layout>
+          <Header className="header-div">
+            <Button
+            type='text'
+            icon={collapsed? <MenuUnfoldOutlined/> : <MenuFoldOutlined/>}
+            onClick={toggleSidebar}
+            />
+             <div style={{ display: 'flex', alignItems: 'center' }}>
+          <span style={{ marginRight: '10px' }}>{name}</span>
+          <Dropdown overlay={menu}>
+            <Avatar style={{ cursor: 'pointer' }} icon={<UserOutlined />} />
+          </Dropdown>
+        </div>
+          </Header>
+        </Layout>
+      <Card className='cards'>
+    <div className='card-div'>
+        <h2>Total Expense</h2>
         <Button type="primary" onClick={showExpenseModal} className='btns'>
-          Add Expense
+            Add Expense
         </Button>
-      </Card>
+    </div>
+</Card>
 
-      {/* Charts */}
+
+      {/* Charts 
       <div className='charts-wrapper'>
         <div className='chart-container'>
           <h2>Your Analytics</h2>
@@ -179,10 +217,19 @@ const ExpenseScreen = () => {
           <Pie {...pieConfig} />
         </div>
       </div>
-      <div className="main-table">
-      <div className="my-table" >
+*/}
+
+      <div  style={{
+        width: "100%",
+        padding: "0rem 2rem",
+        boxShadow: " 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19)",
+        backgroundColor:"white",
+        borderRadius:"0.5rem",
+        marginTop:'1rem'
+      }}>
+     
       <Table scroll={{ x: 'max-content'}} columns={columns} dataSource={expenseData}   pagination={false}  />
-      </div>
+      
       </div>
       </div>
       {/* Expense Table */}
@@ -192,6 +239,10 @@ const ExpenseScreen = () => {
         isExpenseModalVisible={isExpenseModal}
         handleExpenseCancel={handleExpenseCancel}
         onFinish={onFinish}
+        expenseData={expenseData}
+        setExpenseData={setExpenseData}
+        selectedRecord={selectedRecord}
+        isEditMode={isEditMode}
       />
     </div>
   );
