@@ -12,7 +12,6 @@ function AddSavingModal({
   isEditMode,
 }) {
 
-
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -91,7 +90,6 @@ function AddSavingModal({
     handleSavingCancel();
   }
 
-
   return (
     <Modal
       title={isEditMode? "Update Saving" :"Add Saving"}
@@ -142,20 +140,6 @@ function AddSavingModal({
           <DatePicker format="YYYY-MM-DD" className="custom-input full-width-input" />
         </Form.Item>
 
-      {/*  <Form.Item
-          label="Tag"
-          name="tag"
-          className="tag"
-          style={{ fontWeight: 600 }}
-          rules={[{ required: true, message: "Please select a tag!" }]}
-        >
-          <Select className="select-input-2 full-width-input">
-            <Select.Option value="salary">Salary</Select.Option>
-            <Select.Option value="freelance">Freelance</Select.Option>
-            <Select.Option value="investment">Investment</Select.Option>
-          </Select>
-        </Form.Item> */}
-
         <Form.Item>
           <Button className="btn full-width-input" type="primary" htmlType="submit">
           {isEditMode? "Update Saving": "Add Saving"}
@@ -167,3 +151,4 @@ function AddSavingModal({
 }
 
 export default AddSavingModal;
+

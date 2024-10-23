@@ -10,21 +10,21 @@ function SignInForm({ type, setType, isMobile, setIsMobile }) {
   const { login } = useAuth();
   const [emailError, setEmailError] = useState(null);
   const [passwordError, setPasswordError] = useState(null);
-  const [users, setUser] = useState({});
+ const [user, setUser] = useState({});
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || '/';
-
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
       const userObject = jwtDecode(token);
       setUser(userObject);
-      console.log("Sign In Users", userObject);
+      console.log("Sign In user", userObject);
     }
   }, []);
 
+   //Google Authentication 
   function handlecallbackResponse(response) {
     console.log("Callback response received", response.credential);
     let userObject = jwtDecode(response.credential);
@@ -43,10 +43,11 @@ function SignInForm({ type, setType, isMobile, setIsMobile }) {
         if (data.token) {
           localStorage.setItem("token", data.token);
           console.log(jwtDecode(data.token));
-          login(data.token);
+          login(data.token)
+          
         } else {
           console.error("Google Login Error");
-          alert("Google Login Error");
+          message.error("Google Login Error");
         }
       });
   }
@@ -74,7 +75,9 @@ function SignInForm({ type, setType, isMobile, setIsMobile }) {
 
   const [form] = Form.useForm();
 
+  //manual login
   const handleOnSubmit = async (values) => {
+
     const { email, password } = values;
 
     try {
@@ -89,6 +92,7 @@ function SignInForm({ type, setType, isMobile, setIsMobile }) {
       if (!response.ok) {
         const errorData = await response.json();
         setError(errorData.message);
+        message.error("Issue ", errorData.message)
         return;
       }
 
@@ -104,13 +108,11 @@ function SignInForm({ type, setType, isMobile, setIsMobile }) {
     }
   };
 
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  }
-
+ 
   const handleOnClick = (text) => {
     setType(text);
+    form.resetFields(); 
+
   };
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
@@ -135,8 +137,10 @@ function SignInForm({ type, setType, isMobile, setIsMobile }) {
             { required: true, message: "Please input your email!" },
             { type: "email", message: "Invalid email format!" }
           ]}
+          
         >
           <Input
+          size="large"
             className="custom-password-input"
             placeholder="Email"
             type="email"
@@ -150,11 +154,17 @@ function SignInForm({ type, setType, isMobile, setIsMobile }) {
             { required: true, message: "Please input your password!" },
             { min: 6, message: "Password must be at least 6 characters long!" }
           ]}
+
         >
           <Input.Password
-            className="custom-password-input"
+           className="custom-password-input"
+           size="large"
+           autoSize={{
+            minRows: 3,
+            maxRows: 5,
+          }}
             placeholder="Password"
-            iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+           iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
           />
         </Form.Item>
 
@@ -167,9 +177,9 @@ function SignInForm({ type, setType, isMobile, setIsMobile }) {
         </Form.Item>
 
         {type === "signIn" && isMobile && (
-          <div className="account-text" style={{ display: "flex", gap: "5px" }}>
+          <div className="account-text" >
             <p>Don't have an account?</p>
-            <Button className="btns" style={{color:"white"}} type="link" onClick={() => handleOnClick("signUp")}>
+            <Button className="btns" type="link" onClick={() => handleOnClick("signUp")}>
               Sign Up
             </Button>
           </div>
@@ -183,16 +193,16 @@ function SignInForm({ type, setType, isMobile, setIsMobile }) {
 
         <div id="google-signin"></div>
 
-        {Object.keys(users).length !== 0 && (
+        {Object.keys(user).length !== 0 && (
           <Button type="default" onClick={handleSignOut} className="btns">
             Sign Out
           </Button>
         )}
 
-        {users && (
+        {user && (
           <div>
-            <img src={users.picture} alt="" />
-            <h3>{users.name}</h3>
+            <img src={user.picture} alt="" />
+            <h3>{user.name}</h3>
           </div>
         )}
       </Form>
@@ -201,3 +211,4 @@ function SignInForm({ type, setType, isMobile, setIsMobile }) {
 }
 
 export default SignInForm;
+

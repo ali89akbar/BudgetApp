@@ -4,22 +4,22 @@ import { MenuUnfoldOutlined, MenuFoldOutlined,DownOutlined } from '@ant-design/i
 import { Layout, Avatar, Menu, Dropdown, Button } from 'antd';
 import Item from 'antd/es/list/Item';
 import { useAuth } from '../../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 const { Header, Content, Footer, Sider } = Layout;
 useState
-const Heads = ({toggleSidebar,collapsed,setCollapsed}) => {
+const Heads = ({toggleSidebar,collapsed,setCollapsed,name}) => {
     const {logout} = useAuth();
     const {user} = useAuth();
-    const [name,setName] = useState();
-      const menu = (
-        <Menu>
-          <Menu.Item key="1" onClick={() => console.log('Edit Profile clicked')}>Edit Profile</Menu.Item>
-          <Menu.Item key="2" onClick={() => logout()}>Logout</Menu.Item>
-        </Menu>
-      );
-      useEffect(()=>{
-        setName(user?.user?.name)
-      },[name])
-    
+    const navigate = useNavigate();
+    const menu = (
+    <Menu>
+      <Menu.Item key="1" onClick={() => navigate("/update")}>Edit Profile</Menu.Item>
+      <Menu.Item key="2" onClick={() => logout()}>Logout</Menu.Item>
+    </Menu>
+    );
+  
+   
+
   return (
     <Layout>
       <Header
@@ -30,10 +30,10 @@ const Heads = ({toggleSidebar,collapsed,setCollapsed}) => {
           icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
           onClick={toggleSidebar}
         />
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <span style={{ marginRight: '10px' }}>{name}</span>
+        <div className='header-area'>
+          <span className='header-name'>{name}</span>
           <Dropdown overlay={menu}>
-            <Avatar style={{ cursor: 'pointer' }} icon={<UserOutlined />} />
+            <Avatar className='avator' icon={<UserOutlined />} />
           </Dropdown>
         </div>
       </Header>

@@ -17,29 +17,9 @@ import Test from './Components/Test.jsx';
 import { AuthProvider } from './context/AuthContext.jsx'
 
 
-{/*const router= createBrowserRouter(
-  createRoutesFromElements(
-    <>
-    <Route path="/" element={<AuthProvider><Login /></AuthProvider>} />
-
-    <Route path="/signup" element={<SignInForm />} />
-
-
-    <Route element= {<AuthProvider><ProtectedRoute/></AuthProvider>}>
-    <Route path='/dashboard' element={<Dashboard/>}/>
-    <Route path='/chart' element={<PieChart/>}/>
-    <Route path='/income' element={<Income/>}/>
-    <Route path='/expense' element={<ExpenseScreen/>}/>
-    <Route path='/savings' element={<TotalSavings/>}/>
-    <Route path='/forget' element={<Forget/>}/>
-    </Route>
-    </>
-  )
-)
-*/}
-
 createRoot(document.getElementById('root')).render(
   <StrictMode>
 <App/>
   </StrictMode>,
 )
+

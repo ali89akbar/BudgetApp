@@ -1,53 +1,36 @@
 import React, { useState, useEffect } from "react";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
+import { message, Form, Input, Button, Row, Col } from "antd";
+import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons';
+import { useAuth } from "../../../context/AuthContext";
 
 function SignUpForm({ type, setType, isMobile, setIsMobile }) {
-  const [state, setState] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    address: "",
-    password: ""
-  });
-  const [emailError,setEmailError]= useState(null);
-  const [passwordError,setPasswordError]= useState(null);
   const [user, setUser] = useState({});
+  const { login } = useAuth();
+  const [emailError, setEmailError] = useState();
 
   // Google Sign-In callback
-  async function handlecallbackResponse(response) {
-    console.log("Callback response received", response.credential);
-
+  function handlecallbackResponse(response) {
     let userObject = jwtDecode(response.credential);
-    console.log(userObject);
+    setUser(userObject);
+    localStorage.setItem("token", response.credential);
+    document.getElementById("google-signin").hidden = true;
 
-    // Send Google user data to the backend for authentication/registration
-   await fetch("/api/auth/register", {
+    fetch('/api/auth/google-login', {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json"
       },
-      body: JSON.stringify({
-        name: userObject.name,
-        email: userObject.email,
-        password: "123", // Not needed for Google
-        google_id: userObject.sub,
-        signup_method: "google",
-        phone: "",
-        address: ""
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data)
-        if (data.message === "User registered successfully." || data.message === "Email already exists.") {
-          alert(data.message)
-          setUser(userObject);
-          document.getElementById("google-signin").hidden = true;
+      body: JSON.stringify({ token: response.credential })
+    }).then(res => res.json())
+      .then(data => {
+        if (data.token) {
+          localStorage.setItem("token", data.token);
+          login(data.token);
         } else {
-          alert(data.message);
+          message.error("Google Login Error");
         }
-      })
-      .catch((err) => console.error(err));
+      });
   }
 
   useEffect(() => {
@@ -57,7 +40,6 @@ function SignUpForm({ type, setType, isMobile, setIsMobile }) {
       callback: handlecallbackResponse,
     });
 
-    // Render the Google Sign-In button
     google.accounts.id.renderButton(
       document.getElementById("google-signin"),
       {
@@ -74,59 +56,10 @@ function SignUpForm({ type, setType, isMobile, setIsMobile }) {
     document.getElementById("google-signin").hidden = false;
   }
 
-  // Handle form input changes
-  const handleChange = (evt) => {
-    const value = evt.target.value;
-    setState({
-      ...state,
-      [evt.target.name]: value
-    });
-  };
-
-  
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  }
-  const handleBlur = () => {
-    const { email } = state;
-    if (!validateEmail(email)) {
-      setEmailError("Invalid Email");
-    } else {
-      setEmailError(null);
-    }
-
-  };
-
-const handleBlurpass=()=>{
-  const { password } = state;
-    if (password.length < 6) {
-      setPasswordError("Password must be at least 6 characters");
-    } else {
-      setPasswordError(null);
-    }
-}
-  // Handle form submission for manual sign-up
-  const handleOnSubmit = async (evt) => {
-    evt.preventDefault();
-
-    const { name, email, password, phone, address } = state;
-    let valid = true;
-    if (!validateEmail(email)) {
-      setEmailError("Email is not valid");
-      valid = false;
-    } else {
-      setEmailError(null);
-    }
-    if (password.length < 6) {
-      setPasswordError("Password must be at least 6 characters");
-      valid = false;
-    } else {
-      setPasswordError(null);
-    }
-    if (!valid) {
-      return;
-    }
+  // Handle form submission
+  const handleOnSubmit = async (values) => {
+    const { name, email, password, phone, address } = values;
+    
     try {
       const response = await fetch("/api/auth/register", {
         method: "POST",
@@ -147,21 +80,13 @@ const handleBlurpass=()=>{
       const data = await response.json();
 
       if (response.status === 201) {
-        alert("User registered successfully!");
+        message.success("User registered successfully!");
       } else {
-        alert(data.message || "Error during registration.");
+        message.error(data.message || "Error during registration.");
       }
 
     } catch (error) {
       console.error("Error:", error);
-    }
-
-    // Clear the form after submission
-    for (const key in state) {
-      setState({
-        ...state,
-        [key]: ""
-      });
     }
   };
 
@@ -171,60 +96,110 @@ const handleBlurpass=()=>{
 
   return (
     <div className="form-container sign-up-container">
-      <form onSubmit={handleOnSubmit}>
+        <Form
+        className="forms"
+    onFinish={handleOnSubmit}
+  >
         <h1 className="heading">Create Account</h1>
-        
-        <input
-          type="text"
-          name="name"
-          value={state.name}
-          onChange={handleChange}
+
+        <Form.Item
+          name="name"  
+          rules={[{ required: true, message: 'Please input your name!' }]}
+        >
+          <Input 
+          className="custom-password-input"
           placeholder="Name"
-        />
-        <input
-          type="email"
+           />
+        </Form.Item>
+
+        <Form.Item
           name="email"
-          value={state.email}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          placeholder="Email"
-          className={emailError ? "input-error" : ""} // Add this line
-        />
-        {emailError && <p className="error-message">{emailError}</p>}
-        <input
-          type="text"
+       
+          rules={[
+            { required: true, message: 'Please input your email!' },
+            { type: 'email', message: 'Please input a valid email!' }
+          ]}
+        >
+          <Input 
+          className="custom-password-input"
+          placeholder="Email"/>
+        </Form.Item>
+
+        <Form.Item
           name="phone"
-          value={state.phone}
-          onChange={handleChange}
+          rules={[
+            { required: true, message: 'Please input your phone number!' },
+            { len: 11, message: 'Phone number must be 11 digits!' }
+          ]}
+        >
+          <Input
+          className="custom-password-input"
           placeholder="Phone"
-        />
-        <input
-          type="text"
+           />
+        </Form.Item>
+
+        <Form.Item
           name="address"
-          value={state.address}
-          onChange={handleChange}
-          placeholder="Address"
-        />
-        <input
-          type="password"
-          name="password"
-          value={state.password}
-          onChange={handleChange}
-          onBlur={handleBlurpass}
-          placeholder="Password"
-        />
-        {passwordError && <p className="error-message">{passwordError}</p>}
-        <button className="btns">Sign Up</button>
+          rules={[{ required: true, message: 'Please input your address!' }]}
+        >
+          <Input 
+          className={emailError ? "input-error" : "custom-password-input"}
+          placeholder="Address"/>
+        </Form.Item>
+
+        <Form.Item
+  name="password"
+  rules={[
+    { required: true, message: 'Please input your password!' },
+    { min: 6, message: 'Password must be at least 6 characters!' }
+  ]}
+  hasFeedback
+>
+  <Input.Password
+    className="custom-password-input"
+    placeholder="Password"
+    iconRender={visible => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)}
+  />
+        </Form.Item>
+
+        <Form.Item
+  name="confirmPassword"
+  dependencies={['password']}
+  hasFeedback
+  rules={[
+    { required: true, message: 'Please confirm your password!' },
+    ({ getFieldValue }) => ({
+      validator(_, value) {
+        if (!value || getFieldValue('password') === value) {
+          return Promise.resolve();
+        }
+        return Promise.reject(new Error('The two passwords do not match!'));
+      },
+    }),
+  ]}
+>
+  <Input.Password
+    className="custom-password-input"
+    placeholder="Confirm Password"
+    iconRender={visible => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)}
+  />
+        </Form.Item>
+
+        <Button type="primary" htmlType="submit" className="btns" >
+          Sign Up
+        </Button>
 
         {type === "signUp" && isMobile && (
-          <div className="account-text" style={{ display: "flex", gap: "5px" }}>
+          <div className="account-text" >
             <p>Already have an account?</p>
-            <button
-              className="btns"
+            <Button
+              type="link"
               onClick={() => handleOnClick("signIn")}
+              className="btns"
+              style={{ color: "white" }}
             >
               Sign In
-            </button>
+            </Button>
           </div>
         )}
 
@@ -234,11 +209,10 @@ const handleBlurpass=()=>{
           <hr className="line" />
         </div>
 
-        {/* Google Sign-In Button */}
         <div id="google-signin"></div>
 
         {Object.keys(user).length !== 0 && (
-          <button className="btns" onClick={handleSignOut}>Sign out</button>
+          <Button type="link" onClick={handleSignOut}>Sign out</Button>
         )}
 
         {user && (
@@ -247,9 +221,10 @@ const handleBlurpass=()=>{
             <h3>{user.name}</h3>
           </div>
         )}
-      </form>
+      </Form>
     </div>
   );
 }
 
 export default SignUpForm;
+

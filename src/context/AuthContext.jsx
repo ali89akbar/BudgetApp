@@ -13,14 +13,34 @@ export const AuthProvider = ({ children }) => {
     const token = localStorage.getItem('token');
     if (token) {
       const userObject = jwtDecode(token);
-      console.log("Context user: " + userObject.user?.name)
+      setUser(userObject);
+      if(typeof(userObject)==="object")
+      {
+        const userObj = Object.entries(userObject)
+      
+        const userMap = userObj.reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
+        console.log(userMap)
+        setUser(userMap)
+      }
+      else{
       setUser(userObject)
+      }
     }
   }, []);
+  const updateUser = (updatedUser) => {
+    setUser((prev) => ({
+      ...prev,
+      user: {
+        ...prev.user,
+        ...updatedUser,
+      },
+    }));
+  };
 
   const login = (token) => {
     localStorage.setItem('token', token);
     const userObject = jwtDecode(token);
+    
     setUser(userObject);
 
     
@@ -35,7 +55,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout,setUser,updateUser }}>
       {children}
     </AuthContext.Provider>
   );

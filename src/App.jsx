@@ -11,6 +11,8 @@ import TotalSavings from './Components/Dashboard/Pages/TotalSavings'
 
 import Forget from './Components/Login/SignUp/Forget'
 import Heads from './Components/Dashboard/Header/Heads'
+import ResetPassword from './Components/Login/SignUp/ResetPassword'
+import UpdateUser from './Components/UserUpdate/UpdateUser'
 function App() {
   
   return (
@@ -26,9 +28,11 @@ function App() {
     <Route path='/income' element={<IncomeScreen/>}/>
     <Route path='/expense' element={<ExpenseScreen/>}/>
     <Route path='/savings' element={<TotalSavings/>}/>
+    <Route path='/update' element={<UpdateUser/>}/>
           </Route>
           <Route path='/' element={<Login/>}/>
           <Route path='/forget' element={<Forget/>}/>
+          <Route path='reset-password' element={<ResetPassword/>}/>
         </Routes>
       </AuthProvider>
     </Router>

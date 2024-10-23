@@ -1,29 +1,52 @@
 
 
 .sidebar {
-    /* width: 10%; Adjust the width of the sidebar */
-    /* height: 100vh;  */
-    /* position: fixed; 
-    left: 0;
-    top: 0; */
-    background-color: #001529; /* Or any color you want */
-    /* border: 3px solid red; */
+    background-color: #001529;
+    position        : sticky;
+    top             : 0;
+    z-index         : 1000;
+    overflow-y      : auto;
+    padding-top     : 25px; 
 }
 
-/* .contentss {
-    margin-left: 10vw; 
-    width: 80vw;
-    height: 100vh; 
-    position: relative; 
-    margin-bottom: 100vh;
 
-} */
+.sidebar-header {
+    display         : flex;
+    align-items     : center;
+    justify-content : center;
+    margin-bottom   : 20px;
+  }
+  
+  .sidebar-icon {
+    font-size       : 24px;
+    color           : white;
+    margin-right    : 10px;
+  }
+  
+  .sidebar-title {
+    color     : white;
+    font-size : 20px;
+    margin    : 0;
+  }
+  
+  .ant-layout-sider-collapsed .sidebar-header{
+    justify-content : center;
+  }
 
-@media (max-width: 768px) {
+  .ant-layout-sider-collapsed .sidebar-icon{
+    margin-right  : 0;
+  }
+
+  .ant-menu-dark .ant-menu-item-selected{
+    background-color: #006eff !important;
+    color : white !important;
+  }
+  .anti-menu-dark .anti-item-selected .anticon{
+    color : white !important;
+  }
+@media (max-width : 768px) {
     .sidebar {
-        width: 25%; /* Sidebar width on smaller screens */
-        margin-left: 0; /* Remove margin for smaller screens */
-    }
-
-   
+        width       : 25%;
+        margin-left : 0;
+    }   
 }

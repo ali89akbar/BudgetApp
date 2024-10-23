@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Button, Table, Space, message, Progress, Menu, Layout, Dropdown,Avatar } from 'antd';
+import { Card, Button, Table, Space, message, Progress, Menu, Layout, Dropdown,Avatar, Radio, Select } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
 import { MenuUnfoldOutlined, MenuFoldOutlined,DownOutlined } from '@ant-design/icons';
@@ -10,58 +10,94 @@ import { Pie, Bar } from '@ant-design/charts';
 import Item from 'antd/es/list/Item';
 import { Header } from 'antd/es/layout/layout';
 import { useAuth } from '../../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import { unparse } from 'papaparse';
+import Heads from './../Header/Heads'
 
 const ExpenseScreen = () => {
   const [isExpenseModal, setIsExpenseModal] = useState(false);
-  const [expenseData, setExpenseData] = useState([]);
-  const [collapsed, setCollapsed] = useState(false);
-  const [isEditMode,setIsEditMode]= useState(false);
-  const [selectedRecord,setSelectedRecord]= useState(null);
-  const [name, setName] = useState("")
-  const {logout} = useAuth();
-  const {user}= useAuth();
-  console.log(user?.user?.name)
+  const [expenseData, setExpenseData]       = useState([]);
+  const [collapsed, setCollapsed]           = useState(false);
+  const [isEditMode,setIsEditMode]          = useState(false);
+  const [selectedRecord,setSelectedRecord]  = useState(null);
+  const [name, setName]                     = useState("")
+  const {logout}                            = useAuth();
+  const {user}                              = useAuth();
+  const [sortKey,setSortKey] = useState("");
+  const [search,setSearch]=useState("");
+  const [monthFilter,setMonthFilter]= useState("")
+  const [amountFilter, setAmountFilter] = useState(""); 
+  const [dateFilter, setDateFilter] = useState(""); 
+  const [paginationData, setPaginationData] = useState({
+    currentPage: 1,
+    totalPages : 0,
+    pageSize   : 10, // Default page size
+  });
+  const navigate = useNavigate()
+ 
 
-const fetchData= async ()=>{
-  const token = localStorage.getItem('token');
-  const response = await fetch('/api/expense/expense',{
-    method:'GET',
-    headers:{
-      token:`${token}`
+
+//get
+const fetchData = async (page = 1, limit = 10) => {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await fetch(`/api/expense/expense?page=${page}&limit=${limit}`, {
+      method  : "GET",
+      headers : {
+      token   : `${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      console.log("Response not found");
+      return;
     }
-  })
-  if(!response.ok){
-     console.log("Error while Fetching");
-    
+
+    const data = await response.json();
+
+    setExpenseData(data.expenses); // Paginated expense data
+    setPaginationData({
+      currentPage : data.currentPage,
+      totalPages  : data.totalPages,
+      pageSize    : limit,
+    });
+  } catch (error) {
+    console.log("Error fetching data: ", error);
   }
+};
 
-  const data = await response.json();
-  console.log(data)
-  setExpenseData(data)
-}
+// initially and on pagination change
+useEffect(() => {
+  fetchData(paginationData.currentPage, paginationData.pageSize);
+}, []);
 
-  useEffect(()=>{
+const handleTableChange = (pagination) => {
+  fetchData(pagination.current, pagination.pageSize);
+};
+
+useEffect(()=>{
     setName(user?.user?.name.toUpperCase())
     fetchData()
   },[name])
 
-  const totalExpense = expenseData.reduce((sum, item) => sum + item.amount, 0);
-  const targetExpense = 5000; // Set your target expense here
 
+//Delete
   const handleDelete=async(record)=>{
     const token = localStorage.getItem('token');
     try{
-    const response = await fetch(`/api/expense/expense/${record.id}`,{
-      method:'DELETE',
-      headers:{
-        token:`${token}`
+    const response =  await fetch(`/api/expense/expense/${record.id}`,{
+      method  :' DELETE',
+      headers :  { 
+      token   :` ${token}`
       }
     })
+
     if(!response.ok){
       console.log("Error while deleting");
     }
-    setExpenseData(expenseData.filter(item=> item.id !== record.id))
+    setExpenseData(expenseData.filter(item => item.id !== record.id))
     message.success("Expense Deleted Successfully")
+
   }catch(error){
     console.error("Error:", error);
     message.error("Error while deleting expense")
@@ -70,56 +106,10 @@ const fetchData= async ()=>{
   }
  
 
-  {/*const handleUpdate = async(record) => {
-    setIsExpenseModal(true);
-    setIsEditMode(true)
-    setSelectedRecord(record)
-    const token = localStorage.getItem("token");
-    try{
-    const response = await fetch(`api/expense/expense/${record.id}`,{
-      method: "PUT",
-      headers:{
-        'Content-Type': 'application/json',
-        token:`${token}`
-      },
-      body: JSON.stringify({
-        amount: record.amount,
-        type: "Expense",
-        tag: record.tag,
-        transaction_date: record.date
-      }),
-    })
-    if(!response.ok){
-      console.log("Error while updating");
-    }
-    const data = await response.json();
-    setExpenseData(expenseData.map(item => item.id === data.id ? data : item))
-    message.success("Expense Updated successfully")
-    setIsEditMode(false)
-    setIsExpenseModal(false)
-
-  }
-  catch(error){
-    console.error("Error:", error);
-    message.error("Error while updating expense")
-  }
-  
-  };
-*/}
-
-
-  const data = expenseData.map((item) => ({
-    date: item.date,
-    amount: item.amount,
-    category: item.type,
-  }));
-
- 
-
   const handleUpdate = (record) => {
     setIsEditMode(true);
     setSelectedRecord(record);
-    setIsExpenseModal(true); // Open the modal for editing
+    setIsExpenseModal(true); 
   };
 
   const showExpenseModal = () => {
@@ -129,17 +119,17 @@ const fetchData= async ()=>{
 
   const handleExpenseCancel = () => {
     setIsExpenseModal(false);
-    setSelectedRecord(null); // Clear the selected record when closing the modal
+    setSelectedRecord(null); 
   };
 
   const onFinish = (values) => {
     const newData = {
-      key: Date.now().toString(),
-      Name: values.name,
+      key   : Date.now().toString(),
+      Name  : values.name,
       amount: values.amount,
-      tag: values.tag,
-      type: values.type,
-      date: values.date ? values.date.format('YYYY-MM-DD') : '2024-09-25',
+      tag   : values.tag,
+      type  : values.type,
+      date  : values.date ? values.date.format('YYYY-MM-DD') : '2024-09-25',
     };
 
     setExpenseData([...expenseData, newData]);
@@ -148,7 +138,12 @@ const fetchData= async ()=>{
   };
 
   const columns = [
-    {title:'No',dataIndex:'id',key:'id'},
+    { title: 'No',
+      key: 'key',
+      render: (text, record, index) => {
+        const { currentPage, pageSize } = paginationData;
+        return (currentPage - 1) * pageSize + index + 1; // Calculate the row number
+      },},
     { title: 'Name', dataIndex: 'tag', key: 'tag' },
     { title: 'Amount', dataIndex: 'amount', key: 'amount' },
     { title: 'Type', dataIndex: 'type', key: 'type' },
@@ -166,7 +161,7 @@ const fetchData= async ()=>{
   ];
   const menu = (
     <Menu>
-      <Menu.Item key="1" onClick={() => console.log('Edit Profile clicked')}>Edit Profile</Menu.Item>
+      <Menu.Item key="1" onClick={() => navigate("/update")}>Edit Profile</Menu.Item>
       <Menu.Item key="2" onClick={() => logout()}>Logout</Menu.Item>
     </Menu>
   );
@@ -175,74 +170,140 @@ const fetchData= async ()=>{
     setCollapsed(!collapsed);  // Toggle the collapsed state
   };
 
+  let normalizedTransactions = Array.isArray(expenseData)
+  ? expenseData
+      .filter((item) => item !== undefined && item !== null) // Filter undefined entries
+      .map((item) => {
+        // If object is nested 
+        if (item[0]) {
+          return item[0];
+        }
+        return item; 
+      })
+  : [];
+
+const formatDate=(dateString)=>{
+  const date = new Date(dateString);
+  if(!isNaN(date.getTime())){
+  return date.toISOString().split('T')[0];
+  }
+  return null;
+}
+
+// Filtering
+let filters = normalizedTransactions.filter((item) => {
+  if(!item.transaction_date) return false;
+  const transactionDate  = formatDate(item.transaction_date);
+  if(!transactionDate) return false;
+  const transactionMonth = new Date(item.transaction_date).toLocaleString('default', { month: 'long' });
+  return (
+    item.tag &&
+    item.tag.toLowerCase().includes(search.toLowerCase()) &&
+    (monthFilter === "" || monthFilter === undefined || transactionMonth.toLowerCase() === monthFilter.toLowerCase())
+  );
+});
+
+filters.forEach((item)=>{
+  item.formattedDate = formatDate(item.transaction_date);
+})
+// Sorting 
+let sorted = filters.sort((a, b) => {
+  if (sortKey === "date") return new Date(a.transaction_date) - new Date(b.transaction_date);
+  else if (sortKey === "amount") return parseFloat(a.amount) - parseFloat(b.amount);
+  else return 0; // No sorting case
+});
+
+
+  // export 
+function exportToCsv() {
+  const csv = unparse(sorted, {
+    fields: ["id", "user_id", "amount", "tag", "type", "transaction_date", "created_at"],
+  });
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "expense.csv";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
   return (
     
-    <div className='maindiv'>
-      <Sidebar collapsed={collapsed} onCollapseChange={toggleSidebar}  />
-      <div className='content'>
-        <Layout>
-          <Header className="header-div">
-            <Button
-            type='text'
-            icon={collapsed? <MenuUnfoldOutlined/> : <MenuFoldOutlined/>}
-            onClick={toggleSidebar}
-            />
-             <div style={{ display: 'flex', alignItems: 'center' }}>
-          <span style={{ marginRight: '10px' }}>{name}</span>
-          <Dropdown overlay={menu}>
-            <Avatar style={{ cursor: 'pointer' }} icon={<UserOutlined />} />
-          </Dropdown>
-        </div>
-          </Header>
-        </Layout>
-      <Card className='cards'>
-    <div className='card-div'>
+    <div className = 'maindiv'>
+      <Sidebar collapsed = {collapsed} onCollapseChange={toggleSidebar}  />
+      <div className = 'content'>
+        <Heads toggleSidebar={toggleSidebar} collapsed={collapsed} setCollapsed={setCollapsed} name={name} />
+
+      <Card className = 'cards'>
+    <div className = 'card-div'>
         <h2>Total Expense</h2>
-        <Button type="primary" onClick={showExpenseModal} className='btns'>
+        <Button type = "primary" onClick={showExpenseModal} className='btns'>
             Add Expense
         </Button>
     </div>
 </Card>
 
 
-      {/* Charts 
-      <div className='charts-wrapper'>
-        <div className='chart-container'>
-          <h2>Your Analytics</h2>
-          <Bar {...config} />
-        </div>
 
-        <div className='charti'>
-          <h2>Your Expense Distribution</h2>
-          <Pie {...pieConfig} />
-        </div>
+  <div  className='main-Table'>
+    <div className="inside-table">
+      <Select
+        className="select-input"
+        style={{width:"120px"}}
+        onChange={(value) => setMonthFilter(value)} // Set selected month
+        value={monthFilter} // selected value
+        placeholder="Filter by Month"
+        allowClear
+      >
+      <Option value="">All</Option>
+      <Option value="January">January</Option>
+      <Option value="February">February</Option>
+      <Option value="March">March</Option>
+      <Option value="April">April</Option>
+      <Option value="May">May</Option>
+      <Option value="June">June</Option>
+      <Option value="July">July</Option>
+      <Option value="August">August</Option>
+      <Option value="September">September</Option>
+      <Option value="October">October</Option>
+      <Option value="November">November</Option>
+      <Option value="December">December</Option>
+     </Select>
+        
+      <h2>Transactions</h2>
+      <button className="btns" onClick={exportToCsv}>
+              Export to CSV
+      </button>
+         
+          </div>
+     <Table
+      scroll  = {{ x: 'max-content' }}
+      columns = {columns} 
+      dataSource = {filters}
+      pagination={{
+        current  : paginationData.currentPage,
+        total    : paginationData.totalPages * paginationData.pageSize,
+        pageSize : paginationData.pageSize,
+        showSizeChanger: true, 
+        pageSizeOptions: Array.from({length: 50}, (_, i) => (i + 1).toString()), // options for page size
+      }}
+      onChange = {handleTableChange}
+    /> 
       </div>
-*/}
-
-      <div  style={{
-        width: "100%",
-        padding: "0rem 2rem",
-        boxShadow: " 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19)",
-        backgroundColor:"white",
-        borderRadius:"0.5rem",
-        marginTop:'1rem'
-      }}>
+      </div>
      
-      <Table scroll={{ x: 'max-content'}} columns={columns} dataSource={expenseData}   pagination={false}  />
-      
-      </div>
-      </div>
-      {/* Expense Table */}
     
       {/* Expense Modal */}
       <AddExpenseModal
-        isExpenseModalVisible={isExpenseModal}
-        handleExpenseCancel={handleExpenseCancel}
-        onFinish={onFinish}
-        expenseData={expenseData}
-        setExpenseData={setExpenseData}
-        selectedRecord={selectedRecord}
-        isEditMode={isEditMode}
+        isExpenseModalVisible   = {isExpenseModal}
+        handleExpenseCancel     = {handleExpenseCancel}
+        onFinish                = {onFinish}
+        expenseData             = {expenseData}
+        setExpenseData          = {setExpenseData}
+        selectedRecord          = {selectedRecord}
+        isEditMode              = {isEditMode}
+        fetchData               = {fetchData}
       />
     </div>
   );

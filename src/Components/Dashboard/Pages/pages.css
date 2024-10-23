@@ -1,139 +1,160 @@
+.header-area{
+  display : flex;
+  align-items : center;
+}
+.header-name{
+  margin-right: 10px;
+}
 
 .chart-containers {
-    flex: 1; /* Make each chart take up equal space */
-    margin-right: 1rem; /* Add some space between charts */
+    flex : 1; 
+    margin-right : 1rem; 
 
 }
 
 .chart-containers::after {
-    margin-right: 5; /* Remove margin for the last chart */
+    margin-right : 5; 
 }
 
 .income-screen {
-    display: flex;
-    transition: margin-left 0.3s ease; /* Smooth transition */
+    display    : flex;
+    transition : margin-left 0.3s ease; 
   }
   
-  
+  .ant-pagination .ant-pagination-item {
+    line-height : 12px;
+  }
   .charts-wrapper {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px; /* Spacing between charts */
+    display   : flex;
+    flex-wrap : wrap;
+    gap       : 20px; 
   }
   
   .charts-wrapper {
-    display: flex;
-    justify-content: space-between; /* Space between cards */
-    align-items: flex-start;
-    margin-top: 1rem; 
-    margin-bottom: 1rem;
-    width: 100%;
-    flex-wrap: wrap; /* Allow wrapping on smaller screens */
-    gap: 5px; /* Space between the cards */
-    box-sizing: border-box;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19);
-    border-radius: 0.5rem;
-    padding: 1rem;
+    display               : flex;
+    justify-content       : space-between; 
+    align-items           : flex-start;
+    margin-top            : 1rem;
+    margin-bottom         : 1rem;
+    width                 : 100%;
+    flex-wrap             : wrap; 
+    gap                   : 5px; 
+    box-sizing            : border-box;
+    box-shadow            : 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19);
+    border-radius         : 0.5rem;
+    padding               : 1rem;
 }
 
 .chart-container {
-    flex: 0 0 60%; /* Fixed to 60% of the width */
-    margin-right: 1rem; /* Optional: Space between charts */
-    border-radius: 8px; /* Rounded corners */
-    background: white; /* Background color */
+    flex          : 0 0 60%; 
+    margin-right  : 1rem; 
+    border-radius : 8px; 
+    background    : white; 
 }
 
 .charti {
-    flex: 0 0 30%; /* Fixed to 40% of the width */
-    border-radius: 8px; /* Rounded corners */
-    background: white; /* Background color */
-    text-align: center;
+    flex         : 0 0 30%; 
+    border-radius: 8px; 
+    background   : white; 
+    text-align   : center;
 }
 
   
   .income-card {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
+    box-shadow    : 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom : 20px;
   }
   
   .income-table {
-    margin-top: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top : 20px;
+    box-shadow : 0 4px 8px rgba(0, 0, 0, 0.1);
   }
   
-  /* Adjust for collapsed sidebar */
   .income-screen.collapsed .content {
-    margin-left: 60px; /* Reduced margin for collapsed sidebar */
+    margin-left : 60px; 
   }
 
   .cards{
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19);
+    box-shadow   : 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19);
     border-radius: 0.5rem;
-    font-family: 'Montserrat', 'sans-serif' !important;
-    font-size: 20px;
-  
+    font-family  : 'Montserrat', 'sans-serif' !important;
+    font-size    : 20px;
 }
-.ant-layout{
-  display: flex;
-  flex: none;
-}
-.ant-card .ant-card-body{
-padding: 8px;
+
+.main-Table{
+  width: 100%;
+  padding: 0rem 2rem;
+  background-color: white;
+  border-radius: 0.5rem;
+  margin-top: 1rem;  
+  padding-top: 1rem;
+  box-shadow:  0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19);
 }
 .tables{
-    height: auto;
-    padding: 2rem;
-    border-radius: 0.5rem;
-    box-shadow: 0px 0px 30px 8px rgba(227, 227, 227, 0.75);
-    margin: 2rem;
-    width: 97.5%;
+  height       : auto;
+  padding      : 2rem;
+  border-radius: 0.5rem;
+  box-shadow   : 0px 0px 30px 8px rgba(227, 227, 227, 0.75);
+  margin       : 2rem;
+  width        : 97.5%;
 }
-  
 
+.ant-layout{
+  display : flex;
+  flex    : none;
+}
+
+.ant-card .ant-card-body{
+padding : 8px;
+}
  
-.maindiv {
-    display: flex;
-    width: 98%;
-    min-height: 100vh;
+.maindiv 
+  {
+    display : flex;
+    width   : 98%;
+    min-height : 100vh;
   }
   
 
 .card-div{
-  display: flex;
-   justify-content: space-between;
-   align-items: center;
+  display   : flex;
+  justify-content: space-between;
+  align-items    : center;
 }
 
 @media (max-width: 880px) {
     .charts-wrappers {
-        flex-direction: column; /* Stack charts vertically */
-        align-items: center; /* Center the charts horizontally */
-        padding: 1rem; /* Adjust padding for smaller screens */
-        width: 100%; 
-        margin-left: 10vh;
-        box-sizing: border-box; /* Ensure it takes full width on smaller screens */ }
+        flex-direction    : column; 
+        align-items       : center; 
+        padding           : 1rem; 
+        width             : 100%;
+        margin-left       : 10vh;
+        box-sizing        : border-box; 
+     }
     .chart-containers {
-        width: 150%; 
-        max-width: 350px; /* Make charts take full width of their container */
-        margin-bottom: 1.5rem; /* Add space between stacked charts */
+        width         : 150%;
+        max-width     : 350px; 
+        margin-bottom : 1.5rem; 
       }
-    
+
       .chart-containers:last-child {
-        margin-bottom: 0; /* Remove bottom margin for the last chart */
+        margin-bottom  : 0; 
       }
+
       .charts-wrappers {
-        flex-direction: column;
+        flex-direction : column;
       }
+
       .maindiv{
-        min-height: 140vh;
+        min-height : 140vh;
       }
-    
+
       .chart-containers {
-        margin-right: 0; /* Remove right margin in mobile view */
-        margin-bottom: 20px; /* Add bottom margin */
+        margin-right  : 0; 
+        margin-bottom : 20px; 
       }
-    
+
       .cards, .tables {
-        width: 100%; /* Full width on smaller screens */
+        width : 100%; 
       }
 }

@@ -9,6 +9,7 @@ function AddExpenseModal({
   setExpenseData,
   selectedRecord,
   isEditMode,
+  fetchData
 }) {
   const [form] = Form.useForm();
 
@@ -42,10 +43,8 @@ function AddExpenseModal({
       if (!response.ok) {
         throw new Error('Failed to add expense');
       }
-
-      const data = await response.json();
-      setExpenseData([...expenseData, data]);
       message.success('Expense added successfully!');
+      fetchData()
     } catch (error) {
       message.error('There was an error adding the expense.');
       console.log(error);
@@ -77,8 +76,9 @@ function AddExpenseModal({
       const updatedExpenseData = expenseData.map((expense) =>
         expense.id === selectedRecord.id ? updatedData : expense
       );
-      setExpenseData(updatedExpenseData);
+    
       message.success('Expense updated successfully!');
+      fetchData()
     } catch (error) {
       message.error('There was an error updating the expense.');
       console.error(error);
@@ -113,13 +113,30 @@ function AddExpenseModal({
         </Form.Item>
 
         <Form.Item
-          label="Amount"
-          name="amount"
-          rules={[{ required: true, message: 'Please input the expense amount!' }]}
-        >
-          <Input type="number" className="custom-input full-width" />
-        </Form.Item>
-
+  label="Amount"
+  name="amount"
+  style={{ fontWeight: 600 }}
+  rules={[
+    { 
+      required: true, 
+      message: "Please input the income amount!" 
+    },
+    { 
+      validator: (_, value) => {
+        if (value && value < 1) {
+          return Promise.reject(new Error("Amount must be at least 1!"));
+        }
+        return Promise.resolve();
+      }
+    }
+  ]}
+>
+  <Input 
+    type="number" 
+    className="custom-input full-width-input" 
+    min={1} 
+  />
+</Form.Item>
         <Form.Item
           label="Date"
           name="date"

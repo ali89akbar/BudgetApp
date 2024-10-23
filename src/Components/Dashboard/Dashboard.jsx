@@ -14,116 +14,42 @@ import PieChart from './Chart/PieChart.jsx'
 import NoTransactions from './No Transactions/NoTransactions.jsx'
 import BarChart from './Chart/Bargraph.jsx'
 import Income from './Pages/Income.jsx'
-import { useNavigate } from 'react-router-dom'
+import { Navigate, useNavigate } from 'react-router-dom'
 import Login from '../Login/SignUp/Login.jsx'
 import { useAuth } from '../../context/AuthContext.jsx'
+import Heads from './Header/Heads.jsx'
 const { Header, Content, Footer, Sider } = Layout;
 
 const Dashboard = () => {
   const [groupedDataByMonth, setGroupedDataByMonth] = useState({});
   const [collapsed, setCollapsed] = useState(false);
-  const [isExpenseModal,setIsExpenseModal]=useState(false)
-  const [isIncomeModal,setisIncomeModal]= useState(false)
-  const [Income,setIncome]= useState(0)
-  const [name,setName] = useState("");
-  const [expense,setExpense]= useState(0)
-  const [saving,setSaving]= useState(0)
-  const [currentPage,setCurrentPage]=useState(1)
-  const [total,setTotal]= useState(100)
+  const [isExpenseModal,setIsExpenseModal] = useState(false)
+  const [isIncomeModal,setisIncomeModal]   = useState(false)
+  const [Income,setIncome]   = useState(0)
+  const [name,setName]   = useState("");
+  const [expense,setExpense] = useState(0)
+  const [saving,setSaving]   = useState(0)
+  const [currentPage,setCurrentPage]  = useState(1)
+  const [total,setTotal] = useState(100)
+  const [error,setError] = useState("")
   const {logout} = useAuth();
-  const {user}= useAuth();
- 
-//  const navigate = useNavigate();
-console.log("Dashboard user"+ user?.user?.name)
+  const {user}   = useAuth();
+  const [graph,setGraph]= useState();
+  const [transaction,setTransaction]  = useState()
+  const navigate = useNavigate();
+  const [pagination,setPagination] = useState({
+    current  : 1,
+    pageSize : 10,
+    total    : 0,
+  })
 
-  let transactions = [
-      {
-        name: "Freelance Payment",
-        amount: 500,
-        tag: "freelance",
-        type: "income",
-        date: "2024-09-01",
-      },
-      {
-        name: "Salary",
-        amount: 1500,
-        tag: "salary",
-        type: "income",
-        date: "2024-09-05",
-      },
-      {
-        name:"Investment of property",
-        amount: 5000,
-        tag:"property",
-        type:"income",
-        date:"2024-08-09"
-      },
-      {
-        name: "Investment Profit",
-        amount: 300,
-        tag: "investment",
-        type: "income",
-        date: "2024-09-10",
-      },
-      {
-        name: "Grocery Shopping",
-        amount: 100,
-        tag: "food",
-        type: "expense",
-        date: "2024-09-03",
-      },
-      {
-        name: "Tuition Fee",
-        amount: 200,
-        tag: "education",
-        type: "expense",
-        date: "2024-07-06",
-      },
-      {
-        name: "Office Supplies",
-        amount: 75,
-        tag: "office",
-        type: "expense",
-        date: "2024-08-07",
-      },
-    ];
+  const limit = 10;
+  let barChartData;
+  let pieChartData;
 
-    const limit = 10;
-   {/* const fetchData = async(page=1)=>{
-      try{
-        const token = localStorage.getItem("token")
-        const response = await fetch(`/api/dashboard/dashboard?page=${page}`,{
-          method:'GET',
-          headers:{
-            'Content-Type': 'application/json',
-            token: `${token}`,
-          },
-        });
-
-        if(!response.ok){
-          throw new Error('Failed to fetch data')
-        }
-
-        const data = await response.json();
-        //setCurrentPage(page)
-       // setIncome(data.income)
-        //setExpense(data.expense)
-        //setTotal(Income-expense)
-        //setTotal(data.totalTransactions)
-        console.log(data)
-        console.log(data.data)
-      }
-      catch(error){
-        console.error("Error fetching data",error)
-      }
-    }
-  */}
-let barChartData;
-let pieChartData;
-  const fetchData = async ()=>{
+  const fetchData = async (page=1, pageSize=10)=>{
     const token = localStorage.getItem("token")
-  
-    const response = await fetch("/api/dashboard/dashboard",{
+    const response = await fetch(`/api/dashboard/dashboard?page=${page}&limit=${pageSize}`,{
       method:'GET',
       headers:{
         token:`${token}`
@@ -134,42 +60,56 @@ let pieChartData;
 
     }
     const data = await response.json();
-    console.log("this is dashboard data" + data.data)
-    
     setIncome(data.incomeamount)
     setExpense(data.expenseamount)
     setSaving(data.savingamount)
-    if(data.message){
-      message.error(data.message)
-    }
 
-// Function to get the month name and year from the date
-const getMonthYearName = (dateString) => {
-  const date = new Date(dateString);
-  const monthNames = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
-  ];
-  const month = monthNames[date.getMonth()];  //  month name
-  const year = date.getFullYear();
-  return `${month} ${year}`;  // Format 
+    if(data.message && data.message !== "You have currently no transactions"){
+      message.error(data.message)
+      setError(data.message)
+    }
+    else if(data.message === "You have currently no transactions")
+      {
+        setError(data.message)
+        message.info(data.message)
+      }
+    setPagination({
+      current: data.currentPage,
+      pageSize: pageSize,
+      total: data.totalRecords,
+    })
+
+//  month name and year
+  const getMonthYearName = (dateString) => {
+    const date = new Date(dateString);
+    const monthNames = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+    const month = monthNames[date.getMonth()];  //  month name
+    const year = date.getFullYear();
+    return `${month} ${year}`;  // Format 
 };
 
-// Step 1: Map over data 
+if(data.message !== "You have currently no transactions"){
+
+// Step 1: Map data
 const transactions = Object.entries(data.data).map(([key, value]) => {
   return {
     key: key,
-    ...value, // Spread the value 
+    ...value,
   };
 });
 
-// Step 2: Group transactions by month name and year, and sum income and expense
+setTransaction(transactions)
+
+// Step 2: Group by month name year, and sum income and expense
  const groupedDataByMonths = transactions.reduce((acc, { amount, type, transaction_date }) => {
   const monthYear = getMonthYearName(transaction_date);
 
-  // If monthYear is not already in the accumulator, initialize it
+  // If monthYear not their
   if (!acc[monthYear]) {
-    acc[monthYear] = { income: 0, expense: 0 }; // Initialize both income and expense
+    acc[monthYear] = { income: 0, expense: 0 }; // income and expense
   }
 
   // Sum the income or expense for the month
@@ -180,16 +120,16 @@ const transactions = Object.entries(data.data).map(([key, value]) => {
   }
 
   return acc;
+
 }, {});
-setGroupedDataByMonth(groupedDataByMonths)
-// Step 3: Convert groupedDataByMonth into arrays for BarChart and PieChart
+
+// Step 3: Convert groupedDataByMonth into arrays
  barChartData = Object.entries(groupedDataByMonth).map(([month, { income, expense }]) => ({
   month,
   income,
   expense
 }));
 
-// Prepare PieChart data (total income vs. total expense)
 const totalIncome = barChartData.reduce((acc, { income }) => acc + income, 0);
 const totalExpense = barChartData.reduce((acc, { expense }) => acc + expense, 0);
 
@@ -198,16 +138,75 @@ const totalExpense = barChartData.reduce((acc, { expense }) => acc + expense, 0)
   { name: "Expense", value: totalExpense }
 ];
 
-// Output the results
-console.log("Bar Chart Data:", barChartData); // Data for BarChart
-console.log("Pie Chart Data:", pieChartData);  // Data for PieChart (total income vs. total expense)
+}
 }
 
-console.log(groupedDataByMonth)
+const fetchGraphData = async () => {
+  const token = localStorage.getItem("token");
+  const response = await fetch(`/api/dashboard/all`, {
+      method: 'GET',
+      headers: {
+          token: `${token}`,
+      },
+  });
+
+  if (!response.ok) {
+      console.log("Response not found");
+      return;
+  }
+
+  const data = await response.json();
+  const getMonthYearName = (dateString) => {
+const date = new Date(dateString);
+const monthNames = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
+const month = monthNames[date.getMonth()];  //  month name
+const year = date.getFullYear();
+return `${month} ${year}`;  // Format 
+};
+
+  if(data.message !== "You have currently no transactions"){
+
+// Step 1: Map data
+const transactions = Object.entries(data.data).map(([key, value]) => {
+return {
+  key: key,
+  ...value,
+};
+});
+setGraph(transactions)
+
+// Step 2: Group by month name year, and sum income and expense
+const groupedDataByMonths = transactions.reduce((acc, { amount, type, transaction_date }) => {
+const monthYear = getMonthYearName(transaction_date);
+
+// If monthYear not their
+if (!acc[monthYear]) {
+  acc[monthYear] = { income: 0, expense: 0 }; // income and expense
+}
+
+// Sum the income or expense for the month
+if (type === "income") {
+  acc[monthYear].income += parseFloat(amount);
+} else if (type === "expense") {
+  acc[monthYear].expense += parseFloat(amount);
+}
+
+return acc;
+
+}, {});
+setGroupedDataByMonth(groupedDataByMonths)
+
+} 
+};
 
   useEffect(()=>{
     fetchData()
+    fetchGraphData()
   },[])
+
   const showExpenseModal=()=>{
       setIsExpenseModal(true);
   }
@@ -224,82 +223,27 @@ console.log(groupedDataByMonth)
   const onFinish=(values,type)=>{
       console.log("Finish",values,type)
   }
-
+  
   useEffect(()=>{
- 
-setName(user?.user?.name.toUpperCase())
-    
-
+  setName(user?.user?.name.toUpperCase())
   },[name])
 
-  function calculateBalance(){
-      let incomeTotal = 0;
-      let expenseTotal=0;
-
-      transactions.forEach((transaction)=>{
-          if (transaction.type === "income"){
-              incomeTotal+= transaction.amount
-          } else {
-              expenseTotal+= transaction.amount
-          }
-  })
-  setIncome(incomeTotal)
-  setExpense(expenseTotal)
-  setTotal(incomeTotal-expenseTotal)
-  }
-
- 
-    
-    // Adding a new transaction example:
-    const addTransaction = (name, amount, tag, type, date) => {
-      const newTransaction = { name, amount, tag, type, date };
-      transactions.push(newTransaction);
-    };
-    
-    // Example of adding a new expense
-    addTransaction("Restaurant Bill", 50, "food", "expense", "2024-09-20");
-    
-    // Example of adding a new income
-    addTransaction("Project Payment", 700, "freelance", "income", "2024-09-21");
-    
-    console.log(transactions);
-    
-    const toggleSidebar = () => {
+  const toggleSidebar = () => {
       setCollapsed(!collapsed);  // Toggle the collapsed state
     };
   
-    const menu = (
-      <Menu>
-        <Menu.Item key="1" onClick={() => console.log('Edit Profile clicked')}>Edit Profile</Menu.Item>
+  const menu = (
+    <Menu>
+        <Menu.Item key="1" onClick={() => navigate("/update")}>Edit Profile</Menu.Item>
         <Menu.Item key="2" onClick={() => logout()}>Logout</Menu.Item>
-      </Menu>
+    </Menu>
     );
-    
-let sorted = transactions.sort((a,b)=>{
-  return new Date(a.date) - new Date(b.date);
-})
 
 return (
   <div style={{ display: 'flex', width: '100%' }}>
   <Sidebar collapsed={collapsed} onCollapseChange={toggleSidebar} />
-  <div className="content">
-    <Layout>
-      <Header
-        className='header-div'
-      >
-        <Button
-          type="text"
-          icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-          onClick={toggleSidebar}
-        />
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <span style={{ marginRight: '10px' }}>{name}</span>
-          <Dropdown overlay={menu}>
-            <Avatar style={{ cursor: 'pointer' }} icon={<UserOutlined />} />
-          </Dropdown>
-        </div>
-      </Header>
-    </Layout>
+  <div className="content"> 
+    <Heads toggleSidebar={toggleSidebar} collapsed={collapsed} setCollapsed={setCollapsed} name={name}/>
     <Cards
       Income={Income}
       expense={expense}
@@ -307,9 +251,8 @@ return (
       showExpenseModal={showExpenseModal}
       showIncomeModal={showIncomeModal}
     />
-    {console.log("BY MONTH FILETERED "+groupedDataByMonth)}
-    {transactions.length !== 0 ? <BarChart sorted={groupedDataByMonth} /> : <NoTransactions />}
-    
+    {error === "You have currently no transactions" || error === "ID is missing" ?  <NoTransactions /> : <BarChart sorted={groupedDataByMonth} pieChartData={graph}/>}
+ 
     <AddExpenseModal
       isExpenseModalVisible={isExpenseModal}
       handleExpenseCancel={handleExpense}
@@ -320,7 +263,7 @@ return (
       handleIncomeCancel={handleIncome}
       onFinish={onFinish}
     />
-    <Tables transactions={transactions} />
+    <Tables transactions={transaction} pagination={pagination} setPagination={setPagination} fetchData={fetchData}/>
   </div>
 </div>
 
@@ -328,5 +271,4 @@ return (
 };
 
 export default Dashboard;
-
 

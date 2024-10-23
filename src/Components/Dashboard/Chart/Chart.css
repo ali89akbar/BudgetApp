@@ -1,32 +1,25 @@
 .charts-wrapper {
-    display: flex;
-  justify-content: space-between; /* Space between cards */
-  align-items: flex-start;
-   margin-top: 1rem; 
-  margin-bottom: 1rem;
-  width: 100%;
-  flex-wrap: wrap; /* Allow wrapping on smaller screens */
-  gap: 5px; /* Space between the cards */
-  box-sizing: border-box;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19);
-  border-radius: 0.5rem;
-  padding: 1rem;
+  display           : flex;
+  justify-content   : space-between; /* Space between cards */
+  align-items       : flex-start;
+  margin-top        : 1rem;
+  margin-bottom     : 1rem;
+  width             : 100%;
+  flex-wrap         : wrap; /* Allow wrapping on smaller screens */
+  gap               : 5px; /* Space between the cards */
+  box-sizing        : border-box;
+  box-shadow        : 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19);
+  border-radius     : 0.5rem;
+  padding           : 1rem;
 }
 .chart-container {
- /* Make each chart take up equal space */
-    margin-right: 1rem;
-    
+    margin-right    : 1rem;    
 }
-
 .chart-container:last-child {
-    margin-right: 0; /* Remove margin for the last chart */
+    margin-right    : 0; 
 }
-
-@media (max-width: 768px) {
-.charts-wrapper{
-    
-}
-
+.pieBtn{
+  width: 200px;
 }
 
 

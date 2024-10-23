@@ -1,15 +1,37 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Layout, Menu } from 'antd';
-import { UserOutlined, UploadOutlined, DollarOutlined, BankOutlined } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
+import { UserOutlined, UploadOutlined, DollarOutlined, BankOutlined, WalletOutlined } from '@ant-design/icons';
+import { useNavigate, useLocation } from 'react-router-dom';
 import "./sidebar.css";
-
 const { Sider } = Layout;
 
 const Sidebar = ({ collapsed, onCollapseChange }) => {
   const navigate = useNavigate();
+  const location = useLocation(); 
+  const [selectedKey, setSelectedKey] = useState('1'); 
 
-  const handleMenuClick = (key) => {
+  // Sync the selectedKey current route on component mount and route change
+  useEffect(() => {
+    switch (location.pathname) {
+      case '/dashboard':
+        setSelectedKey('1');
+        break;
+      case '/income':
+        setSelectedKey('2');
+        break;
+      case '/expense':
+        setSelectedKey('3');
+        break;
+      case '/savings':
+        setSelectedKey('4');
+        break;
+      default:
+        break;
+    }
+  }, [location.pathname]); // Re-run on route changes
+
+  const handleMenuClick = ({ key }) => {
+    setSelectedKey(key); // Update selected key 
     switch (key) {
       case '1':
         navigate('/dashboard');
@@ -53,17 +75,20 @@ const Sidebar = ({ collapsed, onCollapseChange }) => {
 
   return (
     <Sider
-      style={{paddingTop:"25px"}}
       collapsed={collapsed}
-      onCollapse={onCollapseChange} // Handle sidebar collapse toggle
+      onCollapse={onCollapseChange}
       className="sidebar"
     >
-      <div className="demo-logo-vertical" />
+      <div className="sidebar-header">
+        <WalletOutlined className="sidebar-icon" />
+        {!collapsed && <h2 className="sidebar-title">Budget App</h2>}
+      </div>
       <Menu
         theme="dark"
         mode="inline"
+        selectedKeys={[selectedKey]} 
         items={items}
-        onClick={({ key }) => handleMenuClick(key)} // Handle menu item clicks
+        onClick={handleMenuClick} 
       />
     </Sider>
   );

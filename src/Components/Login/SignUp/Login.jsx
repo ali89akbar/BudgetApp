@@ -4,15 +4,12 @@ import SignInForm from "./SignIn";
 import SignUpForm from "./SignUp";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
-
 export default function Login() {
 
   const [type, setType] = useState("signIn");
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [isMobile, setIsMobile] = useState(windowWidth <= 768);
   
-
-
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
@@ -26,10 +23,8 @@ export default function Login() {
   const handleOnClick = (text) => {
     setType(text);
     
-    
   };
  
-
   const containerClass =
     "container " + (type === "signUp" ? "right-panel-active" : "");
 
@@ -37,44 +32,16 @@ export default function Login() {
     <div className="App">
       <div className={containerClass} id="container">
       {type === "signIn" && (
-  <>
-    <SignInForm type={type} setType={setType} isMobile={isMobile} setIsMobile={setIsMobile}/>
-   {/* {isMobile && (
-      <div className="mobile-buttons" style={{  zIndex: 1000 }}>
-        <div>
-          <p>Don't have an account?</p>
-          <button
-            className="btns"
-            onClick={() => handleOnClick("signUp")}
-          >
-            Sign Up
-          </button>
-        </div>
-      </div> 
-   )} } */}
+        <>
+        <SignInForm type={type} setType={setType} isMobile={isMobile} setIsMobile={setIsMobile}/>
+        </>
+      )}
 
-  </>
-)}
-
-{type === "signUp" && (
-  <>
-    <SignUpForm type={type} setType={setType}  isMobile={isMobile} setIsMobile={setIsMobile} />
-
-   {/* {isMobile && (
-      <div className="mobile-buttons">
-        <div>
-          <p>Already have an account?</p>
-          <button
-            className="btns"
-            onClick={() => handleOnClick("signIn")}
-          >
-            Sign In
-          </button>
-        </div>
-      </div>
-    )} */}
-  </>
-)}
+      {type === "signUp" && (
+        <>
+        <SignUpForm type={type} setType={setType}  isMobile={isMobile} setIsMobile={setIsMobile} />
+        </>
+      )}
 
         {/* Overlay container for non-mobile views */}
         {!isMobile && (
@@ -86,7 +53,7 @@ export default function Login() {
                   To keep connected with us please login with your personal info
                 </p>
                 <button
-                  className="btns"
+                  className="btnds"
                   id="signIn"
                   onClick={() => handleOnClick("signIn")}
                 >
@@ -96,11 +63,11 @@ export default function Login() {
 
               <div className="overlay-panel overlay-right">
                 <h1>
-Get Started</h1>
+                  Get Started</h1>
                 <p>Take control of your finances, one step at a time.Enter your personal details and start your journey with Budget Tracker App</p>                
                 <button
-                  className="ghost"
-                  id="signUp"
+                className="btnds"
+                id="signUp"
                   onClick={() => handleOnClick("signUp")}
                 >
                   Sign Up
@@ -113,3 +80,4 @@ Get Started</h1>
     </div>
   );
 }
+

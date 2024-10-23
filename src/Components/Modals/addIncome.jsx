@@ -12,7 +12,6 @@ function AddIncomeModal({
   fetchData,
 }) {
 
-
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -51,6 +50,7 @@ function AddIncomeModal({
   }
   catch(error){
     console.log("Error while adding Income",error);
+    message.error("Error", error)
   }
   }
 
@@ -93,7 +93,6 @@ function AddIncomeModal({
     handleIncomeCancel();
   }
 
-
   return (
     <Modal
       title={isEditMode? "Update Income" :"Add Income"}
@@ -123,16 +122,30 @@ function AddIncomeModal({
         </Form.Item>
         
         <Form.Item
-          label="Amount"
-          name="amount"
-          style={{ fontWeight: 600 }}
-          rules={[
-            { required: true, message: "Please input the income amount!" },
-          ]}
-        >
-          <Input type="number" className="custom-input full-width-input" />
-        </Form.Item>
-
+  label="Amount"
+  name="amount"
+  style={{ fontWeight: 600 }}
+  rules={[
+    { 
+      required: true, 
+      message: "Please input the income amount!" 
+    },
+    { 
+      validator: (_, value) => {
+        if (value && value < 1) {
+          return Promise.reject(new Error("Amount must be at least 1!"));
+        }
+        return Promise.resolve();
+      }
+    }
+  ]}
+>
+  <Input 
+    type="number" 
+    className="custom-input full-width-input" 
+    min={1} 
+  />
+</Form.Item>
         <Form.Item
           label="Date"
           name="date"
@@ -143,21 +156,6 @@ function AddIncomeModal({
         >
           <DatePicker format="YYYY-MM-DD" className="custom-input full-width-input" />
         </Form.Item>
-
-      {/*  <Form.Item
-          label="Tag"
-          name="tag"
-          className="tag"
-          style={{ fontWeight: 600 }}
-          rules={[{ required: true, message: "Please select a tag!" }]}
-        >
-          <Select className="select-input-2 full-width-input">
-            <Select.Option value="salary">Salary</Select.Option>
-            <Select.Option value="freelance">Freelance</Select.Option>
-            <Select.Option value="investment">Investment</Select.Option>
-          </Select>
-        </Form.Item> */}
-
         <Form.Item>
           <Button className="btn full-width-input" type="primary" htmlType="submit">
           {isEditMode? "Update Income": "Add Income"}
@@ -169,3 +167,4 @@ function AddIncomeModal({
 }
 
 export default AddIncomeModal;
+
